@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import ContainerAug4CodiaStudio from './pages/ContainerAug4CodiaStudio';
 import ContainerAug4CodiaStudio2 from './pages/ContainerAug4CodiaStudio2';
+import ContainerAug4CodiaStudio3 from './pages/ContainerAug4CodiaStudio3';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -35,6 +36,7 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<Home />} />
       <Route path="/ContainerAug4CodiaStudio" element={<ContainerAug4CodiaStudio />} />
       <Route path="/ContainerAug4CodiaStudio2" element={<ContainerAug4CodiaStudio2 />} />
+      <Route path="/ContainerAug4CodiaStudio3" element={<ContainerAug4CodiaStudio3 />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

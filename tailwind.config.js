@@ -11,6 +11,19 @@ module.exports = {
   		},
   		colors: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-text-1-4": "hsl(var(--figma-text-1-4))",
+        "figma-text-2-4": "hsl(var(--figma-text-2-4))",
+        "figma-text-3-4": "hsl(var(--figma-text-3-4))",
+        "figma-text-4-4": "hsl(var(--figma-text-4-4))",
+        "figma-text-5-4": "hsl(var(--figma-text-5-4))",
+        "figma-text-6-4": "hsl(var(--figma-text-6-4))",
+        "figma-text-7-4": "hsl(var(--figma-text-7-4))",
+        "figma-text-8-4": "hsl(var(--figma-text-8-4))",
+        "figma-text-9-4": "hsl(var(--figma-text-9-4))",
+        "figma-text-10-4": "hsl(var(--figma-text-10-4))",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-primary-2": "hsl(var(--figma-primary-2))",
         "figma-accent": "hsl(var(--figma-accent))",
         "figma-muted": "hsl(var(--figma-muted))",
@@ -141,6 +154,16 @@ module.exports = {
   		
   		fontSize: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-16": "16px",
+        "figma-18": "18px",
+        "figma-22": "22px",
+        "figma-24": "24px",
+        "figma-37": "37px",
+        "figma-38": "38px",
+        "figma-42": "42px",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-12": "12px",
         "figma-14": "14px",
         "figma-15": "15px",
@@ -181,6 +204,11 @@ module.exports = {
   		fontWeight: {
         // figma:untitled (cZCvPbAn) — start
         "figma-normal": "400",
+        "figma-bold": "700",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
         "figma-semibold": "600",
         "figma-bold": "700",
         // figma:untitled (cZCvPbAn) — end
@@ -201,6 +229,19 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-17": "17px",
+        "figma-18": "18px",
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-31": "31px",
+        "figma-32": "32px",
+        "figma-48": "48px",
+        "figma-49": "49px",
+        "figma-50": "50px",
+        "figma-51": "51px",
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-12": "12px",
         "figma-13": "13px",
@@ -255,6 +296,11 @@ module.exports = {
   		
   		
   		fontFamily: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-cabin": ['"Cabin"', 'sans-serif'],
+        "figma-geist": ['"Geist"', 'sans-serif'],
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-oxygen": ['"Oxygen"', 'sans-serif'],
         "figma-roboto": ['"Roboto"', 'sans-serif'],
