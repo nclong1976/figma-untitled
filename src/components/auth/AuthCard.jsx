@@ -10,7 +10,12 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 
 // --- validators ---
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
+const isPhone = (v) => /^[0-9]{6,15}$/.test(v || "");
+const isUsername = (v) => /^[A-Za-z0-9]{6,20}$/.test(v || "");
+const isValidAccount = (v) => isUsername(v) || isEmail(v) || isPhone(v);
 const isAlnum = (v) => /^[A-Za-z0-9]{8,16}$/.test(v || "");
+// SDK yêu cầu email để tạo Auth User → tự tạo email ảo khi người dùng nhập username/phone
+const emailForSdk = (account) => (isEmail(account) ? account : `${account}@app.internal`);
 
 function genCaptcha() {
   return String(Math.floor(1000 + Math.random() * 9000));
@@ -132,12 +137,12 @@ export default function AuthCard({ mode = "login" }) {
   const [showPw2, setShowPw2] = useState(false);
 
   // sign-in
-  const [liEmail, setLiEmail] = useState("");
+  const [liAccount, setLiAccount] = useState("");
   const [liPw, setLiPw] = useState("");
   const [liErr, setLiErr] = useState({});
 
-  // sign-up
-  const [suEmail, setSuEmail] = useState("");
+  // sign-up (Tên tài khoản / Số điện thoại / Email)
+  const [suAccount, setSuAccount] = useState("");
   const [suPw, setSuPw] = useState("");
   const [suPw2, setSuPw2] = useState("");
   const [suTxPw, setSuTxPw] = useState("");
@@ -156,13 +161,13 @@ export default function AuthCard({ mode = "login" }) {
   const submitLogin = async (e) => {
     e.preventDefault();
     const errs = {};
-    if (!isEmail(liEmail)) errs.email = "Vui lòng nhập email hợp lệ";
+    if (!isValidAccount(liAccount)) errs.account = "Vui lòng nhập tên tài khoản hợp lệ";
     if (!liPw) errs.password = "Vui lòng nhập mật khẩu";
     setLiErr(errs);
     if (Object.keys(errs).length) return;
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(liEmail, liPw);
+      await base44.auth.loginViaEmailPassword(emailForSdk(liAccount), liPw);
       let role = "user";
       try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
       // Role-Based Routing: admin → /admin, user → /
@@ -177,7 +182,7 @@ export default function AuthCard({ mode = "login" }) {
   // ---- handleSignup ----
   const validateSignup = () => {
     const errs = {};
-    if (!isEmail(suEmail)) errs.email = "Vui lòng nhập email hợp lệ";
+    if (!isValidAccount(suAccount)) errs.account = "Tên tài khoản 6–20 chữ cái/số (hoặc email/SĐT)";
     if (!isAlnum(suPw)) errs.password = "Mật khẩu 8–16 chữ cái và số";
     if (suPw !== suPw2) errs.confirm = "Mật khẩu không khớp";
     if (!isAlnum(suTxPw)) errs.tx = "Mật khẩu thanh toán 8–16 chữ cái và số";
@@ -193,9 +198,10 @@ export default function AuthCard({ mode = "login" }) {
     if (Object.keys(errs).length) return;
     setLoading(true);
     try {
-      await base44.auth.register({ email: suEmail, password: suPw });
+      const email = emailForSdk(suAccount);
+      await base44.auth.register({ email, password: suPw });
       setShowOtp(true);
-      toast({ title: "Mã xác nhận đã gửi", description: `Kiểm tra email ${suEmail}` });
+      toast({ title: "Mã xác nhận đã gửi", description: isEmail(suAccount) ? `Kiểm tra email ${suAccount}` : "Đã gửi mã xác nhận" });
     } catch (err) {
       toast({ title: "Đăng ký thất bại", description: err.message || "Không thể tạo tài khoản", variant: "destructive" });
     } finally {
@@ -206,7 +212,7 @@ export default function AuthCard({ mode = "login" }) {
   const verifyOtp = async () => {
     setLoading(true);
     try {
-      const result = await base44.auth.verifyOtp({ email: suEmail, otpCode });
+      const result = await base44.auth.verifyOtp({ email: emailForSdk(suAccount), otpCode });
       if (result?.access_token) base44.auth.setToken(result.access_token);
       let role = "user";
       try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
@@ -220,7 +226,7 @@ export default function AuthCard({ mode = "login" }) {
 
   const resendOtp = async () => {
     try {
-      await base44.auth.resendOtp(suEmail);
+      await base44.auth.resendOtp(emailForSdk(suAccount));
       toast({ title: "Đã gửi lại mã", description: "Kiểm tra email của bạn" });
     } catch (err) {
       toast({ title: "Không gửi được mã", description: err.message, variant: "destructive" });
@@ -243,7 +249,7 @@ export default function AuthCard({ mode = "login" }) {
           <Brand />
           <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md p-5 mt-6">
             <h2 className="text-white font-bold text-lg">Xác minh email</h2>
-            <p className="text-white/55 text-[13px] mt-1">Mã đã gửi tới <span className="text-[#FFD700]">{suEmail}</span></p>
+            <p className="text-white/55 text-[13px] mt-1">Mã đã gửi tới <span className="text-[#FFD700]">{isEmail(suAccount) ? suAccount : emailForSdk(suAccount)}</span></p>
             <div className="flex justify-center my-5">
               <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode} autoFocus autoComplete="one-time-code">
                 <InputOTPGroup>
@@ -273,8 +279,8 @@ export default function AuthCard({ mode = "login" }) {
           <Tabs mode={mode} />
           <form onSubmit={submitSignup} className="mt-5 space-y-3">
             <div>
-              <WhiteField id="su-email" icon={User} value={suEmail} onChange={(e) => setSuEmail(e.target.value)} placeholder="Nhập tên tài khoản" autoComplete="email" />
-              <Helper err={suErr.email}>Vui lòng nhập 6–20 chữ cái, số hoặc tổ hợp</Helper>
+              <WhiteField id="su-account" icon={User} value={suAccount} onChange={(e) => setSuAccount(e.target.value)} placeholder="Tên tài khoản / SĐT / Email" autoComplete="username" />
+              <Helper err={suErr.account}>Tên tài khoản 6–20 chữ cái và số (không ký tự đặc biệt)</Helper>
             </div>
             <div>
               <WhiteField id="su-pw" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="Nhập mật khẩu" autoComplete="new-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
@@ -325,8 +331,8 @@ export default function AuthCard({ mode = "login" }) {
         <Tabs mode={mode} />
         <form onSubmit={submitLogin} className="mt-6 space-y-3">
           <div>
-            <WhiteField id="li-email" icon={User} type="email" value={liEmail} onChange={(e) => setLiEmail(e.target.value)} placeholder="Nhập tên tài khoản" autoComplete="email" />
-            {liErr.email && <p className="text-[11px] text-[#ff8a8a] mt-1.5 px-1">{liErr.email}</p>}
+            <WhiteField id="li-account" icon={User} type="text" value={liAccount} onChange={(e) => setLiAccount(e.target.value)} placeholder="Tên tài khoản / SĐT / Email" autoComplete="username" />
+            {liErr.account && <p className="text-[11px] text-[#ff8a8a] mt-1.5 px-1">{liErr.account}</p>}
           </div>
           <div>
             <WhiteField id="li-pw" icon={Lock} type={showPw ? "text" : "password"} value={liPw} onChange={(e) => setLiPw(e.target.value)} placeholder="Nhập mật khẩu" autoComplete="current-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
