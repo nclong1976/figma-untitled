@@ -9,6 +9,7 @@ import { useNotifications } from "@/lib/NotificationContext";
 import { ChevronLeft, History, Search, User, Lock, ChevronDown } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { getGameById } from "@/components/home/homeData";
+import { base44 } from "@/api/base44Client";
 
 const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Math.random() * 10));
 
@@ -33,6 +34,17 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
   useEffect(() => { setSelectedChip(tierChips[0]); }, [tierChips]);
   const [betAmount, setBetAmount] = useState(0);
   const [balance, setBalance] = useState(1000.0);
+  const [payout, setPayout] = useState(1);
+
+  useEffect(() => {
+    let alive = true;
+    const loadPayout = () => base44.entities.PayoutSetting.filter({ gameId }).then((list) => { if (alive) setPayout(list[0]?.multiplier ?? 1); }).catch(() => {});
+    loadPayout();
+    const unsub = base44.entities.PayoutSetting.subscribe(loadPayout);
+    return () => { alive = false; unsub && unsub(); };
+  }, [gameId]);
+
+  const effOdds = (oddsStr) => { const n = parseFloat(oddsStr); if (isNaN(n)) return oddsStr; const e = n * payout; return Number.isInteger(e) ? String(e) : e.toFixed(2); };
 
   const [period, setPeriod] = useState(1897430);
   const [countdown, setCountdown] = useState(config.roundSeconds);
@@ -209,7 +221,7 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
                     className={`flex flex-col items-center justify-center h-[64px] bg-white transition-colors ${sel ? "bg-[#ffe9d6] ring-2 ring-[#ff6600] inset-shadow" : "hover:bg-[#fafafa]"}`}
                   >
                     <p className={`text-[13px] font-semibold leading-tight ${sel ? "text-[#ff6600]" : "text-[#333]"}`}>{item.label}</p>
-                    <p className="text-[11px] text-[#999] mt-0.5">{item.odds}</p>
+                    <p className="text-[11px] text-[#999] mt-0.5">{effOdds(item.odds)}</p>
                   </button>
                 );
               })}
