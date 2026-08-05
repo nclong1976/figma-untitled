@@ -1,8 +1,23 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import BottomNav from "@/components/BottomNav";
 
 export default function MarinaBaySandsApp() {
+  const navigate = useNavigate();
+
+  const games = [
+    { title: "Hàn Quốc may mắn 28", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/3b2df2e2c_4c343a3c4_2f02652a8036143883dbcb8537a0c05f42aa1f0e.png", titleClass: "text-figma-12 font-bold font-figma-inter leading-figma-17 text-[#ccb2eb]", gameId: "may-man-28" },
+    { title: "New Zealand may mản 28", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/d71b34984_45923ba29_5a123522383065620c2e37f1c4db6db9a30257d2.png", titleClass: "text-figma-11 font-normal font-paragraph leading-figma-31 text-[#d3bced]", gameId: "may-man-28" },
+    { title: "May mản 28", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/01edaa7eb_ed717bccf_2bb4ec263b6033bc8c29effe31de00492a6e62e3.png", titleClass: "text-figma-12 font-bold font-figma-inter leading-figma-17 text-[#d5bdec]", gameId: "may-man-28" },
+    { title: "Thời gian Đài Loan", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/dda59ff9c_256458f2e_a62a8a4560ccd427df8c1d3c9722019b44f243c5.png", titleClass: "text-figma-14 font-bold font-figma-news-cycle leading-figma-16 text-[#d2baec]", gameId: "xoso" },
+    { title: "Thời gian Hàn Quốc", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/915a8cc57_ad0256a57_eac5849fc6cb956f243bed385ae7717e7e3041b2.png", titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-17 text-[#cbb2ea]", gameId: "xoso" },
+    { title: "Thời gian New Zealand", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/09b3e1e3c_c8d147013_ed16e4f9174b2595b5666f82bc2d002688ccc734.png", titleClass: "text-figma-11 font-bold font-figma-arimo leading-figma-14 text-[#d1b8e9]", gameId: "xoso" },
+    { title: "Đài Loan PK10", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/b4f9873da_f71a46949_916de5bd1f54693d74531ac5b2e584eae8b0f777.png", overlay: { src: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/b19be242e_292e7a944_5952b8f1ffb770a13601dc2d2c3e286f08149e5d.png", cls: "absolute top-[14px] left-[21px] w-[90px] h-[75px] object-contain z-10" }, titleClass: "text-figma-13 font-bold font-figma-manrope leading-figma-15 text-[#c9afe8]", gameId: "pk10" },
+    { title: "Hàn Quốc PK10", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/04566b866_8e622d903_89a367f77b66fa20dae581e3ef944ddc941d1f08.png", overlay: { src: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/86af2d866_d6b9a21b7_937168ca48d3af77bc7be2801bd865606032ef8f.png", cls: "absolute top-[20px] left-[15px] w-[102px] h-[74px] object-contain z-10" }, titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-17 text-[#d9c5ee]", gameId: "pk10" },
+    { title: "Việt Nam PK10", bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/38febe088_1eabcfca9_d156668801802b58119f12682f7a120ece51a035.png", titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-16 text-[#d6c3ec]", gameId: "pk10" },
+  ];
+
   return (
     <main className="max-w-[516px] w-full mx-auto relative min-h-[1062px] bg-background overflow-clip flex flex-col font-sans">
       {/* Global Background Layer */}
@@ -95,67 +110,17 @@ export default function MarinaBaySandsApp() {
           </div>
 
           <div className="grid grid-cols-3 gap-x-[19px] gap-y-[19px] px-[clamp(16px,6.4vw,33px)]">
-            {/* Row 1 */}
-            <div className="relative w-full aspect-[130/163] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/3b2df2e2c_4c343a3c4_2f02652a8036143883dbcb8537a0c05f42aa1f0e.png" alt="Game 1" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-12 font-bold font-figma-inter leading-figma-17 text-[#ccb2eb] text-center px-1">
-                Hàn Quốc may mắn 28
-              </p>
-            </div>
-            <div className="relative w-full aspect-[131/163] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/d71b34984_45923ba29_5a123522383065620c2e37f1c4db6db9a30257d2.png" alt="Game 2" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-11 font-normal font-paragraph leading-figma-31 text-[#d3bced] text-center px-1">
-                New Zealand may mản 28
-              </p>
-            </div>
-            <div className="relative w-full aspect-[130/163] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/01edaa7eb_ed717bccf_2bb4ec263b6033bc8c29effe31de00492a6e62e3.png" alt="Game 3" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-12 font-bold font-figma-inter leading-figma-17 text-[#d5bdec] text-center px-1">
-                May mản 28
-              </p>
-            </div>
-
-            {/* Row 2 */}
-            <div className="relative w-full aspect-[130/163] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/dda59ff9c_256458f2e_a62a8a4560ccd427df8c1d3c9722019b44f243c5.png" alt="Game 4" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-14 font-bold font-figma-news-cycle leading-figma-16 text-[#d2baec] text-center px-1">
-                Thời gian Đài Loan
-              </p>
-            </div>
-            <div className="relative w-full aspect-[131/163] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/915a8cc57_ad0256a57_eac5849fc6cb956f243bed385ae7717e7e3041b2.png" alt="Game 5" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-12 font-bold font-figma-arimo leading-figma-17 text-[#cbb2ea] text-center px-1">
-                Thời gian Hàn Quốc
-              </p>
-            </div>
-            <div className="relative w-full aspect-[130/163] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/09b3e1e3c_c8d147013_ed16e4f9174b2595b5666f82bc2d002688ccc734.png" alt="Game 6" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-11 font-bold font-figma-arimo leading-figma-14 text-[#d1b8e9] text-center px-1">
-                Thời gian New Zealand<br/>Zealand
-              </p>
-            </div>
-
-            {/* Row 3 */}
-            <div className="relative w-full aspect-[130/162] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/b4f9873da_f71a46949_916de5bd1f54693d74531ac5b2e584eae8b0f777.png" alt="Game 7 bg" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/b19be242e_292e7a944_5952b8f1ffb770a13601dc2d2c3e286f08149e5d.png" alt="Roulette" className="absolute top-[14px] left-[21px] w-[90px] h-[75px] object-contain z-10" />
-              <p className="relative z-20 text-figma-13 font-bold font-figma-manrope leading-figma-15 text-[#c9afe8] text-center px-1">
-                Đài Loan PK10
-              </p>
-            </div>
-            <div className="relative w-full aspect-[131/162] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/04566b866_8e622d903_89a367f77b66fa20dae581e3ef944ddc941d1f08.png" alt="Game 8 bg" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/86af2d866_d6b9a21b7_937168ca48d3af77bc7be2801bd865606032ef8f.png" alt="Cards" className="absolute top-[20px] left-[15px] w-[102px] h-[74px] object-contain z-10" />
-              <p className="relative z-20 text-figma-12 font-bold font-figma-arimo leading-figma-17 text-[#d9c5ee] text-center px-1">
-                Hàn Quốc PK10
-              </p>
-            </div>
-            <div className="relative w-full aspect-[129/162] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform">
-              <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/38febe088_1eabcfca9_d156668801802b58119f12682f7a120ece51a035.png" alt="Game 9" className="absolute inset-0 w-full h-full object-cover z-0" />
-              <p className="relative z-10 text-figma-12 font-bold font-figma-arimo leading-figma-16 text-[#d6c3ec] text-center px-1">
-                Việt Nam PK10
-              </p>
-            </div>
+            {games.map((g, i) => (
+              <button
+                key={i}
+                onClick={() => navigate(`/choi-game/${g.gameId}`)}
+                className="relative w-full aspect-[130/162] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer hover:scale-[1.02] transition-transform"
+              >
+                <img src={g.bg} alt={g.title} className="absolute inset-0 w-full h-full object-cover z-0" />
+                {g.overlay && <img src={g.overlay.src} alt="" className={g.overlay.cls} />}
+                <p className={`relative z-20 text-center px-1 ${g.titleClass}`}>{g.title}</p>
+              </button>
+            ))}
           </div>
         </div>
 
