@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { getGameConfig, CHIPS } from "./gameConfig";
+import { getTier } from "@/components/lobby/lobbyData";
 import GameHeader from "./GameHeader";
 import PreviousDrawBar from "./PreviousDrawBar";
 import CountdownBar from "./CountdownBar";
@@ -9,7 +10,7 @@ import BetControlBar from "./BetControlBar";
 
 const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Math.random() * 10));
 
-export default function GamePlayScreen({ gameId }) {
+export default function GamePlayScreen({ gameId, tier }) {
   const config = useMemo(() => getGameConfig(gameId), [gameId]);
   const { toast } = useToast();
 
@@ -18,7 +19,9 @@ export default function GamePlayScreen({ gameId }) {
 
   const [selectedCells, setSelectedCells] = useState([]);
   const [tickets, setTickets] = useState([]);
-  const [selectedChip, setSelectedChip] = useState(CHIPS[0]);
+  const tierChips = useMemo(() => getTier(tier)?.chips || CHIPS, [tier]);
+  const [selectedChip, setSelectedChip] = useState(tierChips[0]);
+  useEffect(() => { setSelectedChip(tierChips[0]); }, [tierChips]);
   const [betAmount, setBetAmount] = useState(0);
   const [balance, setBalance] = useState(1000.0);
 
@@ -142,7 +145,7 @@ export default function GamePlayScreen({ gameId }) {
       </section>
 
       <BetControlBar
-        chips={CHIPS}
+        chips={tierChips}
         selectedChip={selectedChip}
         onSelectChip={(c) => { setSelectedChip(c); setBetAmount(c); }}
         betAmount={betAmount}
