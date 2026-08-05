@@ -136,8 +136,8 @@ export default function Home() {
         <img
           src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/51180f3b5_b60421ada_4b68ef08ef88c5e8b3877cb04357aa802c84a60d.png"
           alt="Starry Background"
-          className="absolute top-[190px] left-0 w-full h-[805px] object-cover"
-        />
+          className="absolute top-[190px] left-0 w-full h-[805px] object-cover" />
+        
       </div>
 
       {/* Content Flow */}
@@ -149,8 +149,8 @@ export default function Home() {
           <img
             src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/e57f331cd_708f7e507_e87283081c2ffaf4802a737a4f6e0a1d686d3b3c.png"
             alt="Casino Floor"
-            className="w-full h-full object-cover"
-          />
+            className="w-full h-full object-cover px-1" />
+          
         </div>
 
         <AnnouncementBar announcements={ANNOUNCEMENTS} />
@@ -160,8 +160,8 @@ export default function Home() {
           onDeposit={openChat}
           onWithdraw={handleWithdraw}
           onHistory={() => setOpenBet(true)}
-          onSupport={openChat}
-        />
+          onSupport={openChat} />
+        
 
         {/* Game Lobby Section */}
         <div className="mt-[18px] flex flex-col shrink-0">
@@ -190,10 +190,10 @@ export default function Home() {
         minTurnover={MIN_TURNOVER}
         turnover={turnover}
         linked={linked}
-        onSubmit={submitWithdraw}
-      />
+        onSubmit={submitWithdraw} />
+      
       <LinkAccountModal open={openLink} onOpenChange={setOpenLink} onAdd={addLinked} linked={linked} />
       <BetHistoryModal open={openBet} onOpenChange={setOpenBet} />
-    </main>
-  );
+    </main>);
+
 }
