@@ -42,6 +42,8 @@ export const GAMES = [
 
 ];
 
+export const getGameById = (id) => GAMES.find((g) => g.id === id);
+
 export const ANNOUNCEMENTS = [
   { id: "a1", title: "★ NguyenHa thắng 5.200.000 coin tại May mắn 28 Hàn Quốc!", detail: "Vào lúc 09:32 sáng nay, người chơi NguyenHa đã trúng giải đặc biệt tại phòng May mắn 28 Hàn Quốc với tổng thưởng 5.200.000 coin. Chúc mừng người chơi may mắn!" },
   { id: "a2", title: "Sự kiện: Nạp lần đầu tặng 50% đến 2.000.000 coin", detail: "Từ 01/08 - 15/08, thành viên mới nạp lần đầu sẽ nhận thưởng 50% giá trị nạp, tối đa 2.000.000 coin. Áp dụng cho tất cả phương thức thanh toán." },

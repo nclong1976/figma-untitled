@@ -31,7 +31,7 @@ export default function ContainerAug4CodiaStudio3() {
       toast({ title: "Số dư không đủ để vào phòng này, vui lòng nạp thêm", variant: "destructive" });
       return;
     }
-    navigate(`/choi-game/${game.gameId}?tier=${tier.id}`);
+    navigate(`/choi-game/${game.gameId}?tier=${tier.id}&g=${game.id}`);
   };
 
   return (

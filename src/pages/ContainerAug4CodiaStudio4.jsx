@@ -6,5 +6,6 @@ export default function ContainerAug4CodiaStudio4() {
   const { gameId } = useParams();
   const [params] = useSearchParams();
   const tier = params.get("tier");
-  return <GamePlayScreen gameId={gameId} tier={tier} />;
+  const variantId = params.get("g");
+  return <GamePlayScreen gameId={gameId} tier={tier} variantId={variantId} />;
 }

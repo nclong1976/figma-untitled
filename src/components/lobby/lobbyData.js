@@ -37,6 +37,12 @@ export const TIERS = [
 
 export const getTier = (id) => TIERS.find((t) => t.id === id);
 
+// Pick the highest tier the user can afford, or fall back to the lowest.
+export const resolveInitialTier = (balance) => {
+  const affordable = TIERS.filter((t) => balance >= t.minBalance);
+  return affordable.length ? affordable[affordable.length - 1].id : TIERS[0].id;
+};
+
 export const CAT_LABELS = {
   all: "Tất cả",
   lucky28: "May mắn 28",

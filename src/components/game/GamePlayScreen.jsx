@@ -5,11 +5,17 @@ import { getGameConfig, CHIPS, computeDrawLabels } from "./gameConfig";
 import { getTier } from "@/components/lobby/lobbyData";
 import Ball from "./Ball";
 import { ChevronLeft, History, Search, User, Lock, ChevronDown } from "lucide-react";
+import { Image } from "@/components/ui/image";
+import { getGameById } from "@/components/home/homeData";
 
 const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Math.random() * 10));
 
-export default function GamePlayScreen({ gameId, tier }) {
+export default function GamePlayScreen({ gameId, tier, variantId }) {
   const config = useMemo(() => getGameConfig(gameId), [gameId]);
+  const variant = useMemo(() => (variantId ? getGameById(variantId) : undefined), [variantId]);
+  const displayTitle = variant?.title || config.name;
+  const thumb = variant?.bg;
+  const tierLabel = getTier(tier)?.label;
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -97,7 +103,14 @@ export default function GamePlayScreen({ gameId, tier }) {
       {/* Top header */}
       <header className="relative z-20 shrink-0 h-11 flex items-center justify-between px-3 bg-[#0A0E1A]/90 backdrop-blur-md border-b border-white/10">
         <button onClick={() => navigate(-1)} className="shrink-0"><ChevronLeft className="w-6 h-6 text-white/85" /></button>
-        <h1 className="text-white font-bold text-[15px] flex-1 text-center truncate px-2">{config.name}</h1>
+        <div className="flex-1 flex items-center justify-center gap-2 px-2 min-w-0">
+          {thumb && (
+            <div className="w-7 h-7 rounded-md overflow-hidden shrink-0 ring-1 ring-white/15">
+              <Image src={thumb} alt="" fittingType="fill" className="w-full h-full" />
+            </div>
+          )}
+          <h1 className="text-white font-bold text-[15px] truncate">{displayTitle}</h1>
+        </div>
         <div className="flex items-center gap-3 shrink-0">
           <button className="hover:opacity-80"><Search className="w-5 h-5 text-white/85" /></button>
           <button className="hover:opacity-80"><User className="w-5 h-5 text-white/85" /></button>
@@ -107,7 +120,7 @@ export default function GamePlayScreen({ gameId, tier }) {
       {/* Live status bar */}
       <section className="relative z-10 shrink-0 px-3 py-1.5 bg-[#0d1226] border-b border-white/10">
         <div className="flex items-center gap-2">
-          <p className="text-[#d99] text-[11px] shrink-0">Kỳ {period} Giai đoạn</p>
+          <p className="text-[#d99] text-[11px] shrink-0">{tierLabel ? `${tierLabel} · ` : ""}Kỳ {period}</p>
           <div className="flex items-center gap-1">
             {drawn.map((n, i) => <Ball key={i} number={n} size={22} />)}
           </div>

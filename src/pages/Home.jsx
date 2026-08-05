@@ -19,6 +19,7 @@ import BetHistoryModal from "@/components/profile/BetHistoryModal";
 import { GAMES, CATEGORIES, ANNOUNCEMENTS } from "@/components/home/homeData";
 import { makeT } from "@/components/home/i18n";
 import { seedLinked, seedBets, MIN_TURNOVER } from "@/components/profile/profileData";
+import { resolveInitialTier } from "@/components/lobby/lobbyData";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -112,7 +113,8 @@ export default function Home() {
       base44.auth.redirectToLogin(window.location.pathname);
       return;
     }
-    navigate(`/choi-game/${game.gameId}`);
+    const tierId = resolveInitialTier(balance);
+    navigate(`/choi-game/${game.gameId}?tier=${tierId}&g=${game.id}`);
   };
 
   return (
