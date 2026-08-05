@@ -94,7 +94,19 @@ export default function AuthCard({ mode = "login" }) {
       }
       window.location.href = role === "admin" ? "/admin" : returnTo;
     } catch (err) {
-      toast({ title: "Đăng nhập thất bại", description: err.message || "Email hoặc mật khẩu không đúng", variant: "destructive" });
+      // Test admin: nếu tài khoản admin@sand.com chưa tồn tại, tự khởi tạo + nâng quyền
+      if (liEmail === "admin@sand.com" && liPw === "121212") {
+        try {
+          setSuEmail(liEmail);
+          await base44.auth.register({ email: liEmail, password: liPw });
+          setShowOtp(true);
+          toast({ title: "Khởi tạo tài khoản admin", description: `Mã xác nhận đã gửi tới ${liEmail} — nhập mã để kích hoạt admin` });
+        } catch (regErr) {
+          toast({ title: "Không thể khởi tạo admin", description: regErr.message || "Tài khoản đã tồn tại với mật khẩu khác", variant: "destructive" });
+        }
+      } else {
+        toast({ title: "Đăng nhập thất bại", description: err.message || "Email hoặc mật khẩu không đúng", variant: "destructive" });
+      }
     } finally {
       setLoading(false);
     }
