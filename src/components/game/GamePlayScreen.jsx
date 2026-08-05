@@ -90,9 +90,12 @@ export default function GamePlayScreen({ gameId, tier }) {
   };
 
   return (
-    <main className="max-w-[619px] w-full mx-auto h-[100dvh] relative flex flex-col overflow-hidden bg-[#1a1a1a] font-sans select-none">
+    <main className="max-w-[619px] w-full mx-auto h-[100dvh] relative flex flex-col overflow-hidden bg-[#0A0E1A] font-sans select-none">
+      {/* Deep-space overlay */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_18%_8%,rgba(124,199,255,0.10),transparent_40%),radial-gradient(circle_at_84%_16%,rgba(255,215,0,0.06),transparent_42%)]" />
+
       {/* Top header */}
-      <header className="relative z-20 shrink-0 h-11 flex items-center justify-between px-3 bg-[#1a1a1a] border-b border-white/10">
+      <header className="relative z-20 shrink-0 h-11 flex items-center justify-between px-3 bg-[#0A0E1A]/90 backdrop-blur-md border-b border-white/10">
         <button onClick={() => navigate(-1)} className="shrink-0"><ChevronLeft className="w-6 h-6 text-white/85" /></button>
         <h1 className="text-white font-bold text-[15px] flex-1 text-center truncate px-2">{config.name}</h1>
         <div className="flex items-center gap-3 shrink-0">
@@ -102,7 +105,7 @@ export default function GamePlayScreen({ gameId, tier }) {
       </header>
 
       {/* Live status bar */}
-      <section className="relative z-10 shrink-0 px-3 py-1.5 bg-[#222] border-b border-white/10">
+      <section className="relative z-10 shrink-0 px-3 py-1.5 bg-[#0d1226] border-b border-white/10">
         <div className="flex items-center gap-2">
           <p className="text-[#d99] text-[11px] shrink-0">Kỳ {period} Giai đoạn</p>
           <div className="flex items-center gap-1">
@@ -121,7 +124,7 @@ export default function GamePlayScreen({ gameId, tier }) {
       </section>
 
       {/* Active draw bar */}
-      <section className="relative z-20 shrink-0 h-10 flex items-center px-3 bg-[#2a2a2a] border-b border-white/10">
+      <section className="relative z-20 shrink-0 h-10 flex items-center px-3 bg-[#0d1226] border-b border-white/10">
         <p className="text-[#f0a0a4] text-[13px] font-semibold">{period + 1}</p>
         <div className="ml-2 px-2 py-0.5 rounded-md bg-[#cc0000] text-white text-[13px] font-bold tabular-nums">{mm}:{ss}</div>
         <p className="ml-2 text-white/70 text-[12px]">Đặt cược</p>
