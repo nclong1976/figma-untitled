@@ -70,6 +70,7 @@ export default function ContainerAug4CodiaStudio2() {
 
     update((d) => ({
       ...d,
+      balance: +(d.balance - amount).toFixed(2),
       withdrawRequests: [newReq, ...(d.withdrawRequests || [])],
       txs: [{
         txid: newReq.id,

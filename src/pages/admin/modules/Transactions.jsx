@@ -80,10 +80,11 @@ export default function Transactions() {
             return r;
           });
 
-          // Nếu duyệt -> trừ số dư thật của user. Nếu từ chối -> giữ nguyên hoặc hoàn dư.
+          // Khi người dùng gửi đơn rút, tiền đã bị trừ tạm thời.
+          // Nếu Admin duyệt -> giữ nguyên bị trừ. Nếu Admin từ chối -> hoàn lại tiền vào ví người dùng (+tx.amount)!
           let nextBalance = d.balance;
-          if (status === "completed") {
-            nextBalance = Math.max(0, +(d.balance - tx.amount).toFixed(2));
+          if (status === "rejected") {
+            nextBalance = +(d.balance + tx.amount).toFixed(2);
           }
 
           return {

@@ -41,9 +41,10 @@ export default function LinkAccountModal({ open, onOpenChange, onAdd, linked }) 
 
   const submit = () => {
     if (tab === "bank") {
-      if (!bank.bankName || !bank.accountNumber || !bank.holder) return;
-      onAdd({ id: "L" + Date.now(), type: "bank", ...bank });
-      setBank({ bankName: "", accountNumber: "", holder: user?.full_name?.toUpperCase() || "" });
+      const holderName = (user?.full_name || user?.account || "CHỦ TÀI KHOẢN").toUpperCase();
+      if (!bank.bankName || !bank.accountNumber) return;
+      onAdd({ id: "L" + Date.now(), type: "bank", bankName: bank.bankName, accountNumber: bank.accountNumber, holder: holderName });
+      setBank({ bankName: "", accountNumber: "", holder: holderName });
     } else {
       if (!crypto.walletAddress) return;
       onAdd({ id: "L" + Date.now(), type: "crypto", walletAddress: crypto.walletAddress, network: "USDT-TRC20" });
@@ -170,28 +171,19 @@ export default function LinkAccountModal({ open, onOpenChange, onAdd, linked }) 
               />
             </div>
 
-            {/* Chủ tài khoản – auto-fill từ fullName */}
+            {/* Chủ tài khoản – tự động điền read-only từ tên đăng ký */}
             <div>
               <Label className="text-xs text-white/70 mb-1.5 flex items-center justify-between">
-                <span>Chủ tài khoản <span className="text-red-400">*</span></span>
-                {user?.full_name && (
-                  <button
-                    type="button"
-                    className="text-[10px] text-[#bd9c59] hover:underline"
-                    onClick={() => setBank({ ...bank, holder: user.full_name.toUpperCase() })}
-                  >
-                    Dùng tên đăng ký
-                  </button>
-                )}
+                <span>Chủ tài khoản (Tên đăng ký định danh) <span className="text-red-400">*</span></span>
               </Label>
               <Input
-                value={bank.holder}
-                onChange={(e) => setBank({ ...bank, holder: e.target.value.toUpperCase() })}
-                placeholder="NGUYEN VAN A (in hoa)"
-                className="bg-[#2a2040] border-[#3a2d52] focus:border-[#bd9c59] text-white uppercase"
+                value={(user?.full_name || user?.account || "CHỦ TÀI KHOẢN").toUpperCase()}
+                readOnly
+                disabled
+                className="bg-[#151224] border-[#3a2d52] text-[#bd9c59] font-bold uppercase cursor-not-allowed"
                 style={{ fontSize: "16px" }}
               />
-              <p className="text-[10px] text-white/40 mt-1">Phải khớp chính xác tên chủ tài khoản ngân hàng</p>
+              <p className="text-[10px] text-white/40 mt-1">Tự động điền theo thông tin đăng ký (không thể sửa để bảo mật)</p>
             </div>
           </div>
         ) : (

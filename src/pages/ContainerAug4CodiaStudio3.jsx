@@ -1,30 +1,47 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Wallet } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import BottomNav from "@/components/BottomNav";
 import GameSection from "@/components/lobby/GameSection";
 import { LOBBY_CATEGORIES, CAT_LABELS } from "@/components/lobby/lobbyData";
 import { GAMES } from "@/components/home/homeData";
+import { useAuth } from "@/lib/AuthContext";
+import { useUserData } from "@/lib/userData";
+import { getGameConfig } from "@/lib/gameStore";
 
 export default function ContainerAug4CodiaStudio3() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
+  const { data } = useUserData(user?.id);
+  const balance = data?.balance ?? 0;
+
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("all");
-  // Mock wallet balance for dynamic access control (Sơ/Trung open, Cao borderline, VIP locked)
-  const [balance] = useState(5000);
 
   useEffect(() => {
-    const id = setTimeout(() => setLoading(false), 700);
+    const id = setTimeout(() => setLoading(false), 500);
     return () => clearTimeout(id);
   }, []);
 
   const games = category === "all" ? GAMES : GAMES.filter((g) => g.category === category);
 
   const handleClick = (game, tier) => {
-    if (game.status === "maintenance") {
+    const cfg = getGameConfig(game.gameId || game.id);
+    const status = game.status === "disabled" || cfg?.status === "disabled" ? "disabled" : (cfg?.status || game.status);
+
+    if (status === "disabled") {
+      toast({ title: "Trò chơi này đã bị tắt hoàn toàn", variant: "destructive" });
+      return;
+    }
+    if (status === "maintenance") {
       toast({ title: "Game đang bảo trì, vui lòng quay lại sau", variant: "destructive" });
+      return;
+    }
+    if (!isAuthenticated) {
+      toast({ title: "Vui lòng đăng nhập để tham gia" });
       return;
     }
     if (balance < tier.minBalance) {
@@ -39,12 +56,18 @@ export default function ContainerAug4CodiaStudio3() {
       {/* Deep-space nebulae overlay */}
       <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_18%_12%,rgba(124,199,255,0.12),transparent_42%),radial-gradient(circle_at_82%_24%,rgba(255,215,0,0.08),transparent_45%),radial-gradient(circle_at_50%_90%,rgba(124,255,203,0.08),transparent_48%)]" />
 
-      {/* Sticky header with title + category filters */}
+      {/* Sticky header with title + real-time balance + category filters */}
       <header className="relative z-20 sticky top-0 bg-[#0A0E1A]/85 backdrop-blur-md border-b border-white/10">
-        <div className="px-4 h-12 flex items-center">
+        <div className="px-4 h-12 flex items-center justify-between">
           <h1 className="text-white font-bold text-base">Sảnh Chơi</h1>
-          <span className="ml-auto text-white/50 text-xs">Số dư: {balance.toLocaleString()} coin</span>
+
+          {/* Real-time Wallet Balance Badge */}
+          <div className="flex items-center gap-1.5 bg-[#1e1832] border border-[#bd9c59]/40 rounded-full px-2.5 py-1 text-xs text-[#bd9c59] font-bold shadow-sm">
+            <Wallet className="w-3.5 h-3.5 text-[#bd9c59]" />
+            <span>{balance.toLocaleString()} coin</span>
+          </div>
         </div>
+
         <div className="flex gap-2 px-4 pb-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
           {LOBBY_CATEGORIES.map((c) => (
             <button
