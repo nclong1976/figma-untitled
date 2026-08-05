@@ -11,6 +11,19 @@ module.exports = {
   		},
   		colors: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-text-1-7": "hsl(var(--figma-text-1-7))",
+        "figma-text-2-7": "hsl(var(--figma-text-2-7))",
+        "figma-text-3-7": "hsl(var(--figma-text-3-7))",
+        "figma-text-4-7": "hsl(var(--figma-text-4-7))",
+        "figma-text-5-7": "hsl(var(--figma-text-5-7))",
+        "figma-text-6-7": "hsl(var(--figma-text-6-7))",
+        "figma-text-7-7": "hsl(var(--figma-text-7-7))",
+        "figma-text-8-7": "hsl(var(--figma-text-8-7))",
+        "figma-text-9-7": "hsl(var(--figma-text-9-7))",
+        "figma-text-10-7": "hsl(var(--figma-text-10-7))",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-secondary-3": "hsl(var(--figma-secondary-3))",
         "figma-accent-3": "hsl(var(--figma-accent-3))",
         "figma-muted-2": "hsl(var(--figma-muted-2))",
@@ -195,6 +208,12 @@ module.exports = {
   		
   		fontSize: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-24": "24px",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-13": "13px",
         "figma-15": "15px",
         "figma-17": "17px",
@@ -268,6 +287,12 @@ module.exports = {
   		fontWeight: {
         // figma:untitled (cZCvPbAn) — start
         "figma-normal": "400",
+        "figma-medium": "500",
+        "figma-bold": "700",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
         // figma:untitled (cZCvPbAn) — end
       
         // figma:untitled (cZCvPbAn) — start
@@ -303,6 +328,15 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-23": "23px",
+        "figma-25": "25px",
+        "figma-26": "26px",
+        "figma-28": "28px",
+        "figma-29": "29px",
+        "figma-30": "30px",
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-20": "20px",
         "figma-21": "21px",
