@@ -10,6 +10,8 @@ import { ChevronLeft, History, Search, User, Lock, ChevronDown } from "lucide-re
 import { Image } from "@/components/ui/image";
 import { getGameById } from "@/components/home/homeData";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
+import { useWallet } from "@/hooks/useWallet";
 
 const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Math.random() * 10));
 
@@ -32,8 +34,9 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
   const tierChips = useMemo(() => getTier(tier)?.chips || CHIPS, [tier]);
   const [selectedChip, setSelectedChip] = useState(tierChips[0]);
   useEffect(() => { setSelectedChip(tierChips[0]); }, [tierChips]);
+  const { user } = useAuth();
+  const { balance, update: updateBalance } = useWallet();
   const [betAmount, setBetAmount] = useState(0);
-  const [balance, setBalance] = useState(1000.0);
   const [payout, setPayout] = useState(1);
 
   useEffect(() => {
@@ -101,14 +104,21 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
 
   const handleReset = () => { setSelectedCells([]); setTickets([]); setBetAmount(0); };
 
-  const handlePlace = () => {
+  const handlePlace = async () => {
     if (bettingClosed) { toast({ title: "Đang chờ kỳ tiếp theo", variant: "destructive" }); return; }
     const toSubmit = tickets.length > 0 ? tickets : selectedCells.map((s) => ({ ...s, amount: betAmount }));
     if (toSubmit.length === 0) { toast({ title: "Vui lòng chọn cách chơi", variant: "destructive" }); return; }
     const total = toSubmit.reduce((a, t) => a + (t.amount || 0), 0);
     if (!total || total <= 0) { toast({ title: "Chưa nhập tiền cược", variant: "destructive" }); return; }
     if (total > balance) { toast({ title: "Số dư không đủ", variant: "destructive" }); return; }
-    setBalance((b) => b - total);
+    try {
+      await base44.entities.Bet.bulkCreate(toSubmit.map((t) => ({
+        userId: user.id, userEmail: user.email,
+        hallId: gameId, hallName: displayTitle, tier: tierLabel || tier || "",
+        amount: t.amount, result: "pending", period: String(period),
+      })));
+    } catch (e) {}
+    updateBalance(+(balance - total).toFixed(2));
     setTickets([]); setSelectedCells([]); setBetAmount(0);
     toast({ title: "Đã gửi đơn đặt hàng", description: `${toSubmit.length} vé · ${total} coin · kỳ ${period}` });
     push({ type: "balance", title: "Đặt cược thành công", body: `-${total} coin · kỳ ${period}` });

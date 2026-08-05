@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
+import { useWallet } from "@/hooks/useWallet";
 import { useToast } from "@/components/ui/use-toast";
 import { useNotifications } from "@/lib/NotificationContext";
 import BottomNav from "@/components/BottomNav";
@@ -19,7 +20,7 @@ import LinkAccountModal from "@/components/profile/LinkAccountModal";
 import BetHistoryModal from "@/components/profile/BetHistoryModal";
 import { GAMES, CATEGORIES, ANNOUNCEMENTS } from "@/components/home/homeData";
 import { makeT } from "@/components/home/i18n";
-import { seedLinked, seedBets, MIN_TURNOVER } from "@/components/profile/profileData";
+import { seedLinked, MIN_TURNOVER } from "@/components/profile/profileData";
 import { resolveInitialTier, getTier } from "@/components/lobby/lobbyData";
 
 export default function Home() {
@@ -36,9 +37,8 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Withdraw / link state (shared with profile modals)
-  const [balance, setBalance] = useState(1000);
+  const { balance, update: updateBalance } = useWallet();
   const [linked, setLinked] = useState(seedLinked);
-  const [bets] = useState(seedBets);
   const [turnover] = useState(1500);
   const [openWithdraw, setOpenWithdraw] = useState(false);
   const [openLink, setOpenLink] = useState(false);
@@ -88,8 +88,12 @@ export default function Home() {
     setOpenWithdraw(true);
   };
 
-  const submitWithdraw = ({ amount, bank }) => {
-    setBalance((b) => +(b - amount).toFixed(2));
+  const submitWithdraw = async ({ amount, bank }) => {
+    try {
+      const me = await base44.auth.me();
+      await base44.entities.Transaction.create({ userId: me.id, userEmail: me.email, type: "withdraw", amount, method: bank?.bankName || "", status: "pending" });
+    } catch (e) {}
+    updateBalance(+(balance - amount).toFixed(2));
     toast({ title: "Gửi yêu cầu rút tiền thành công", description: `${amount} coin · ${bank?.bankName}` });
     push({ type: "balance", title: "Rút tiền thành công", body: `-${amount} coin · ${bank?.bankName}` });
     setOpenWithdraw(false);
@@ -189,7 +193,7 @@ export default function Home() {
         onSubmit={submitWithdraw}
       />
       <LinkAccountModal open={openLink} onOpenChange={setOpenLink} onAdd={addLinked} linked={linked} />
-      <BetHistoryModal open={openBet} onOpenChange={setOpenBet} bets={bets} />
+      <BetHistoryModal open={openBet} onOpenChange={setOpenBet} />
     </main>
   );
 }

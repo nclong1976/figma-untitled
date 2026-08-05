@@ -14,17 +14,16 @@ import TxHistoryModal from "@/components/profile/TxHistoryModal";
 import LinkAccountModal from "@/components/profile/LinkAccountModal";
 import SupportChat from "@/components/profile/SupportChat";
 import WithdrawModal from "@/components/profile/WithdrawModal";
-import { seedBets, seedTxs, seedLinked, MIN_TURNOVER } from "@/components/profile/profileData";
+import { seedLinked, MIN_TURNOVER } from "@/components/profile/profileData";
+import { useWallet } from "@/hooks/useWallet";
 
 export default function ContainerAug4CodiaStudio2() {
   const { toast } = useToast();
   const { push } = useNotifications();
   const [user, setUser] = useState(null);
   const [hidden, setHidden] = useState(false);
-  const [balance, setBalance] = useState(1000);
-  const [profit, setProfit] = useState(0);
-  const [bets] = useState(seedBets);
-  const [txs, setTxs] = useState(seedTxs);
+  const { balance, update: updateBalance } = useWallet();
+  const [profit] = useState(0);
   const [linked, setLinked] = useState(seedLinked);
   const [turnover] = useState(1500);
 
@@ -36,18 +35,6 @@ export default function ContainerAug4CodiaStudio2() {
   const [openChat, setOpenChat] = useState(false);
 
   useEffect(() => { base44.auth.me().then(setUser).catch(() => {}); }, []);
-
-  // Simulated realtime balance/profit fluctuation
-  useEffect(() => {
-    const t = setInterval(() => {
-      setProfit((p) => {
-        const np = +(p + (Math.random() * 4 - 2)).toFixed(2);
-        setBalance(+(1000 + np).toFixed(2));
-        return np;
-      });
-    }, 6000);
-    return () => clearInterval(t);
-  }, []);
 
   const copyId = async () => {
     const id = user?.id ? user.id.slice(-6) : "000000";
@@ -64,18 +51,14 @@ export default function ContainerAug4CodiaStudio2() {
     toast({ title: "Liên kết tài khoản thành công" });
   };
 
-  const submitWithdraw = ({ amount, bank, pin }) => {
+  const submitWithdraw = async ({ amount, bank, pin }) => {
     if (amount > balance) return toast({ title: "Số dư không đủ", variant: "destructive" });
     if (turnover < MIN_TURNOVER) return toast({ title: "Chưa đủ số vòng cược tối thiểu", variant: "destructive" });
-    setTxs((t) => [{
-      txid: "WD" + Date.now(),
-      type: "withdraw",
-      amount,
-      bank: bank?.bankName,
-      status: "processing",
-      time: new Date().toLocaleString("vi-VN"),
-    }, ...t]);
-    setBalance((b) => +(b - amount).toFixed(2));
+    try {
+      const me = user || await base44.auth.me();
+      await base44.entities.Transaction.create({ userId: me.id, userEmail: me.email, type: "withdraw", amount, method: bank?.bankName || "", status: "pending" });
+    } catch (e) {}
+    updateBalance(+(balance - amount).toFixed(2));
     toast({ title: "Gửi yêu cầu rút tiền thành công", description: `${amount} coin · ${bank?.bankName}` });
     push({ type: "balance", title: "Rút tiền thành công", body: `-${amount} coin · ${bank?.bankName}` });
     setOpenWithdraw(false);
@@ -122,8 +105,8 @@ export default function ContainerAug4CodiaStudio2() {
       </div>
 
       <SettingsModal open={openSettings} onOpenChange={setOpenSettings} onToast={toast} />
-      <BetHistoryModal open={openBet} onOpenChange={setOpenBet} bets={bets} />
-      <TxHistoryModal open={!!txMode} onOpenChange={(v) => !v && setTxMode(null)} txs={txs} mode={txMode || "both"} />
+      <BetHistoryModal open={openBet} onOpenChange={setOpenBet} />
+      <TxHistoryModal open={!!txMode} onOpenChange={(v) => !v && setTxMode(null)} mode={txMode || "both"} />
       <LinkAccountModal open={openLink} onOpenChange={setOpenLink} onAdd={addLinked} linked={linked} />
       <SupportChat open={openChat} onOpenChange={setOpenChat} />
       <WithdrawModal
