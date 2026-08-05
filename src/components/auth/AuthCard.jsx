@@ -158,9 +158,9 @@ export default function AuthCard({ mode = "login" }) {
     }
   };
 
-  const pwToggle = (open, setOpen) => (
-    <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/80" aria-label="Hiện mật khẩu">
-      {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+  const EyeToggle = ({ show, onToggle }) => (
+    <button type="button" onClick={onToggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/80" aria-label="Hiện mật khẩu">
+      {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
     </button>
   );
 
@@ -226,7 +226,7 @@ export default function AuthCard({ mode = "login" }) {
               id="li-pw" label="Mật khẩu" icon={Lock}
               type={showPw ? "text" : "password"} value={liPw} onChange={(e) => setLiPw(e.target.value)}
               placeholder="••••••••" error={liErr.password} autoComplete="current-password"
-              right={pwToggle(showPw, setShowPw)}
+              right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />}
             />
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-white/65 text-[12px] cursor-pointer">
@@ -246,10 +246,8 @@ export default function AuthCard({ mode = "login" }) {
             <Field id="su-user" label="Tên đăng nhập" icon={KeyRound} value={suUser} onChange={(e) => setSuUser(e.target.value)} placeholder="nguyenvana" error={suErr.username} />
             <Field id="su-phone" label="Số điện thoại" icon={Phone} value={suPhone} onChange={(e) => setSuPhone(e.target.value)} placeholder="09xxxxxxxx" error={suErr.phone} />
             <Field id="su-email" label="Email" icon={Mail} type="email" value={suEmail} onChange={(e) => setSuEmail(e.target.value)} placeholder="you@example.com" error={suErr.email} autoComplete="email" />
-            <Field id="su-pw" label="Mật khẩu" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="••••••••" error={suErr.password} autoComplete="new-password" right={pwToggle(showPw, setShowPw)} />
-            <Field id="su-pw2" label="Nhập lại mật khẩu" icon={Lock} type={showPw2 ? "text" : "password"} value={suPw2} onChange={(e) => setSuPw2(e.target.value)} placeholder="••••••••" error={suErr.confirm} autoComplete="new-password"
-              right={<button type="button" onClick={() => setShowPw2(!showPw2)} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/80">{showPw2 ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}</button>}
-            />
+            <Field id="su-pw" label="Mật khẩu" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="••••••••" error={suErr.password} autoComplete="new-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
+            <Field id="su-pw2" label="Nhập lại mật khẩu" icon={Lock} type={showPw2 ? "text" : "password"} value={suPw2} onChange={(e) => setSuPw2(e.target.value)} placeholder="••••••••" error={suErr.confirm} autoComplete="new-password" right={<EyeToggle show={showPw2} onToggle={() => setShowPw2(!showPw2)} />} />
             <Field id="su-ref" label="Mã giới thiệu (tuỳ chọn)" icon={Gift} value={suRef} onChange={(e) => setSuRef(e.target.value)} placeholder="ABC123" />
             <CTA type="submit" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
@@ -259,6 +257,11 @@ export default function AuthCard({ mode = "login" }) {
         )}
       </div>
 
+      <div className="flex items-center gap-3 mt-5 mb-3">
+        <div className="flex-1 h-px bg-white/10" />
+        <span className="text-white/40 text-[11px]">hoặc tiếp tục với</span>
+        <div className="flex-1 h-px bg-white/10" />
+      </div>
       <SocialButtons onGoogle={onGoogle} onSoon={onSoon} />
       <p className="text-center text-white/35 text-[11px] mt-5">
         Bằng việc tiếp tục, bạn đồng ý với Điều khoản & Chính sách bảo mật.
