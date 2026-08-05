@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
 import ContainerAug4CodiaStudio from './pages/ContainerAug4CodiaStudio';
+import ContainerAug4CodiaStudio2 from './pages/ContainerAug4CodiaStudio2';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -33,6 +34,7 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/ContainerAug4CodiaStudio" element={<ContainerAug4CodiaStudio />} />
+      <Route path="/ContainerAug4CodiaStudio2" element={<ContainerAug4CodiaStudio2 />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

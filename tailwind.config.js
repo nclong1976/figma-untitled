@@ -11,6 +11,22 @@ module.exports = {
   		},
   		colors: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-primary-2": "hsl(var(--figma-primary-2))",
+        "figma-accent": "hsl(var(--figma-accent))",
+        "figma-muted": "hsl(var(--figma-muted))",
+        "figma-text-1-3": "hsl(var(--figma-text-1-3))",
+        "figma-text-2-3": "hsl(var(--figma-text-2-3))",
+        "figma-text-3-3": "hsl(var(--figma-text-3-3))",
+        "figma-text-4-3": "hsl(var(--figma-text-4-3))",
+        "figma-text-5-3": "hsl(var(--figma-text-5-3))",
+        "figma-text-6-3": "hsl(var(--figma-text-6-3))",
+        "figma-text-7-3": "hsl(var(--figma-text-7-3))",
+        "figma-text-8-3": "hsl(var(--figma-text-8-3))",
+        "figma-text-9-3": "hsl(var(--figma-text-9-3))",
+        "figma-text-10-3": "hsl(var(--figma-text-10-3))",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-primary": "hsl(var(--figma-primary))",
         "figma-secondary": "hsl(var(--figma-secondary))",
         "figma-text-1-2": "hsl(var(--figma-text-1-2))",
@@ -125,6 +141,19 @@ module.exports = {
   		
   		fontSize: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-12": "12px",
+        "figma-14": "14px",
+        "figma-15": "15px",
+        "figma-16": "16px",
+        "figma-19": "19px",
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-22": "22px",
+        "figma-24": "24px",
+        "figma-25": "25px",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-17": "17px",
         "figma-18": "18px",
         "figma-19": "19px",
@@ -153,6 +182,12 @@ module.exports = {
         // figma:untitled (cZCvPbAn) — start
         "figma-normal": "400",
         "figma-semibold": "600",
+        "figma-bold": "700",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
+        "figma-semibold": "600",
         // figma:untitled (cZCvPbAn) — end
       
   			
@@ -166,6 +201,23 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-12": "12px",
+        "figma-13": "13px",
+        "figma-14": "14px",
+        "figma-16": "16px",
+        "figma-17": "17px",
+        "figma-18": "18px",
+        "figma-19": "19px",
+        "figma-20": "20px",
+        "figma-22": "22px",
+        "figma-26": "26px",
+        "figma-30": "30px",
+        "figma-31": "31px",
+        "figma-33": "33px",
+        "figma-34": "34px",
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-19": "19px",
         "figma-20": "20px",
@@ -203,6 +255,14 @@ module.exports = {
   		
   		
   		fontFamily: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-oxygen": ['"Oxygen"', 'sans-serif'],
+        "figma-roboto": ['"Roboto"', 'sans-serif'],
+        "figma-mulish": ['"Mulish"', 'sans-serif'],
+        "figma-englebert": ['"Englebert"', 'sans-serif'],
+        "figma-epilogue": ['"Epilogue"', 'sans-serif'],
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-microsoft-sans-serif": ['"Microsoft Sans Serif"', 'sans-serif'],
         "figma-times-new-roman": ['"Times New Roman"', 'sans-serif'],
