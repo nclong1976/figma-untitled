@@ -17,6 +17,10 @@ import AdminRoute from '@/components/admin/AdminRoute';
 import AdminApp from './pages/admin/AdminApp';
 import ContainerAug5CodiaStudio from './pages/ContainerAug5CodiaStudio';
 import ContainerAug5CodiaStudio2 from './pages/ContainerAug5CodiaStudio2';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -34,8 +38,11 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      navigateToLogin();
-      return null;
+      const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password', '/oauth-consent'];
+      if (!AUTH_ROUTES.includes(window.location.pathname)) {
+        navigateToLogin();
+        return null;
+      }
     }
   }
 
@@ -53,6 +60,10 @@ const AuthenticatedApp = () => {
       </Route>
       <Route path="/ContainerAug5CodiaStudio" element={<ContainerAug5CodiaStudio />} />
       <Route path="/ContainerAug5CodiaStudio2" element={<ContainerAug5CodiaStudio2 />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

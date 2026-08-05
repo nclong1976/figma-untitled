@@ -8,6 +8,7 @@ import Bets from "./modules/Bets";
 import Transactions from "./modules/Transactions";
 import Notifications from "./modules/Notifications";
 import Settings from "./modules/Settings";
+import Chat from "./modules/Chat";
 
 const MODULES = {
   overview: Overview,
@@ -17,6 +18,7 @@ const MODULES = {
   transactions: Transactions,
   notifications: Notifications,
   settings: Settings,
+  chat: Chat,
 };
 
 export default function AdminApp() {

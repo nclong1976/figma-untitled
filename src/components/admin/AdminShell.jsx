@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LayoutDashboard, Users, Gamepad2, Ticket, ArrowLeftRight, Bell, Settings, LogOut, Menu, Shield } from "lucide-react";
+import { LayoutDashboard, Users, Gamepad2, Ticket, ArrowLeftRight, Bell, Settings, LogOut, Menu, Shield, MessageSquare } from "lucide-react";
 
 const NAV = [
   { id: "overview", label: "Tổng quan", icon: LayoutDashboard },
@@ -8,6 +8,7 @@ const NAV = [
   { id: "bets", label: "Đặt cược", icon: Ticket },
   { id: "transactions", label: "Giao dịch", icon: ArrowLeftRight },
   { id: "notifications", label: "Thông báo", icon: Bell },
+  { id: "chat", label: "Nhắn tin", icon: MessageSquare },
   { id: "settings", label: "Cài đặt", icon: Settings },
 ];
 
