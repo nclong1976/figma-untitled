@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
@@ -306,30 +306,15 @@ function SupportButton({ onClick }) {
 }
 
 function Shell({ children }) {
-  const buildings = useMemo(() => Array.from({ length: 14 }, (_, i) => 30 + i * 37 % 70), []);
   return (
     <main className="max-w-[480px] w-full mx-auto h-[100dvh] relative overflow-hidden bg-[#0b0e1e] flex flex-col font-sans">
-      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_18%_12%,rgba(112,51,255,0.18),transparent_42%),radial-gradient(circle_at_82%_16%,rgba(75,0,255,0.16),transparent_45%),radial-gradient(circle_at_50%_88%,rgba(255,77,79,0.10),transparent_50%)]" />
-
-      {/* Skyline panel */}
-      <div className="absolute bottom-0 inset-x-0 h-44 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e1e] via-[#0b0e1e]/70 to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 flex items-end justify-center gap-1 opacity-50 px-2">
-          {buildings.map((h, i) =>
-          <div key={i} className="flex-1 max-w-[26px] bg-[#1a2040] rounded-t-sm" style={{ height: h }} />
-          )}
-        </div>
-        {/* fireworks */}
-        <span className="absolute top-6 left-1/4 w-1.5 h-1.5 rounded-full bg-[#ff4d4f] blur-[2px]" />
-        <span className="absolute top-10 left-1/2 w-1.5 h-1.5 rounded-full bg-[#ffb74d] blur-[2px]" />
-        <span className="absolute top-8 right-1/4 w-1.5 h-1.5 rounded-full bg-[#fff] blur-[2px]" />
-      </div>
+      <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/2d647052e_df779bc59113d334ec43d855e61f1ce5.jpg" alt="" className="absolute inset-0 z-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#0b0e1e]/55 via-[#0b0e1e]/40 to-[#0b0e1e]/85" />
 
       <div className="relative z-10 flex-1 flex flex-col px-5 py-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {children}
       </div>
     </main>);
-
 }
 
 function Brand() {
