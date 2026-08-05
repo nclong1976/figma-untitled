@@ -333,11 +333,16 @@ function Shell({ children }) {
 
 function Brand() {
   return (
-    <div className="flex flex-col items-center text-center mt-4">
-      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#ff8a3c] to-[#ff4d4f] flex items-center justify-center shadow-[0_8px_24px_rgba(255,77,79,0.4)]">
-        <Gem className="w-6 h-6 text-white" />
+    <div className="flex flex-col items-center text-center mt-5">
+      <div className="relative w-16 h-16">
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#ffb066] via-[#ff5c5c] to-[#a01818] shadow-[0_10px_30px_rgba(255,77,79,0.45)]" />
+        <div className="absolute inset-[3px] rounded-full bg-[#0b0e1e] flex items-center justify-center">
+          <span className="text-[26px] font-black bg-gradient-to-b from-[#ffd9a8] to-[#ff6b6b] bg-clip-text text-transparent leading-none" style={{ fontFamily: '"Sofadi One", serif' }}>S</span>
+        </div>
+        <span className="absolute -inset-1 rounded-full bg-[#ff4d4f]/25 blur-md -z-10" />
       </div>
-      <h1 className="text-white font-bold text-xl mt-2.5 tracking-wide">Sands</h1>
+      <h1 className="text-white font-bold text-[22px] mt-3 tracking-[0.18em]">SANDS</h1>
+      <p className="text-white/45 text-[11px] mt-1 tracking-[0.2em] uppercase">Game · Casino</p>
     </div>
   );
 }
