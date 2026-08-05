@@ -11,8 +11,8 @@ import SupportChat from "@/components/profile/SupportChat";
 import { Image } from "@/components/ui/image";
 import {
   Eye, EyeOff, Loader2, Mail, Lock, User, KeyRound, Gem, Send, MessageCircle,
-  Shield, ChevronLeft, X, Headphones,
-} from "lucide-react";
+  Shield, ChevronLeft, X, Headphones } from
+"lucide-react";
 
 // --- validators ---
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
@@ -29,14 +29,14 @@ function Field({ icon: Icon, id, label, type = "text", value, onChange, placehol
         <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" aria-hidden="true" />
         <Input
           id={id} type={type} value={value} onChange={onChange} placeholder={placeholder}
-          autoComplete={autoComplete} className={fieldCls}
-        />
+          autoComplete={autoComplete} className={fieldCls} />
+        
         {right}
       </div>
       {helper && !error && <p className="text-[11px] text-white/40 pl-1">{helper}</p>}
       {error && <p className="text-[#ff6b6b] text-[11px] pl-1">{error}</p>}
-    </div>
-  );
+    </div>);
+
 }
 
 export default function AuthCard({ mode = "login" }) {
@@ -87,7 +87,7 @@ export default function AuthCard({ mode = "login" }) {
       await base44.auth.loginViaEmailPassword(liEmail, liPw);
       if (remember) localStorage.setItem("rememberLogin", "1");
       let role = "user";
-      try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
+      try {const me = await base44.auth.me();role = me?.role || "user";} catch {/* ignore */}
       window.location.href = role === "admin" ? "/admin" : returnTo;
     } catch (err) {
       toast({ title: "Đăng nhập thất bại", description: err.message || "Email hoặc mật khẩu không đúng", variant: "destructive" });
@@ -130,7 +130,7 @@ export default function AuthCard({ mode = "login" }) {
     try {
       const result = await base44.auth.verifyOtp({ email: suEmail, otpCode });
       if (result?.access_token) base44.auth.setToken(result.access_token);
-      try { await base44.auth.updateMe({ full_name: suEmail.split("@")[0] }); } catch { /* non-critical */ }
+      try {await base44.auth.updateMe({ full_name: suEmail.split("@")[0] });} catch {/* non-critical */}
       window.location.href = returnTo;
     } catch (err) {
       toast({ title: "Xác minh thất bại", description: err.message || "Mã không hợp lệ", variant: "destructive" });
@@ -148,11 +148,11 @@ export default function AuthCard({ mode = "login" }) {
     }
   };
 
-  const EyeToggle = ({ show, onToggle }) => (
-    <button type="button" onClick={onToggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/80" aria-label="Hiện mật khẩu">
+  const EyeToggle = ({ show, onToggle }) =>
+  <button type="button" onClick={onToggle} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/45 hover:text-white/80" aria-label="Hiện mật khẩu">
       {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-    </button>
-  );
+    </button>;
+
 
   // ---- OTP step ----
   if (showOtp) {
@@ -180,8 +180,8 @@ export default function AuthCard({ mode = "login" }) {
         </div>
         <SupportButton onClick={() => setSupportOpen(true)} />
         <SupportChat open={supportOpen} onOpenChange={setSupportOpen} />
-      </Shell>
-    );
+      </Shell>);
+
   }
 
   return (
@@ -198,19 +198,19 @@ export default function AuthCard({ mode = "login" }) {
       {/* Tabs */}
       <div className="mt-6 flex items-center gap-6 border-b border-white/10">
         {[
-          { id: "login", label: "Đăng nhập tài khoản" },
-          { id: "register", label: "Đăng ký tài khoản" },
-        ].map((t) => (
-          <button key={t.id} onClick={() => setTab(t.id)} className={`pb-2.5 text-[14px] font-semibold relative transition-colors ${tab === t.id ? "text-white" : "text-white/45"}`}>
+        { id: "login", label: "Đăng nhập tài khoản" },
+        { id: "register", label: "Đăng ký tài khoản" }].
+        map((t) =>
+        <button key={t.id} onClick={() => setTab(t.id)} className={`pb-2.5 text-[14px] font-semibold relative transition-colors ${tab === t.id ? "text-white" : "text-white/45"}`}>
             {t.label}
             {tab === t.id && <span className="absolute left-0 right-0 -bottom-px h-[2px] rounded-full bg-[#ff4d4f]" />}
           </button>
-        ))}
+        )}
       </div>
 
       <div className="mt-5">
-        {tab === "login" ? (
-          <form onSubmit={submitLogin} className="space-y-3.5">
+        {tab === "login" ?
+        <form onSubmit={submitLogin} className="space-y-3.5">
             <Field id="li-email" icon={User} type="email" value={liEmail} onChange={(e) => setLiEmail(e.target.value)} placeholder="Nhập tên tài khoản" error={liErr.email} autoComplete="email" helper="Vui lòng nhập email hợp lệ" />
             <Field id="li-pw" icon={Lock} type={showPw ? "text" : "password"} value={liPw} onChange={(e) => setLiPw(e.target.value)} placeholder="Nhập mật khẩu" error={liErr.password} autoComplete="current-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
             <div className="flex items-center justify-between">
@@ -234,9 +234,9 @@ export default function AuthCard({ mode = "login" }) {
               <GoogleIcon className="w-4 h-4" />
               <span className="text-white/85 text-[13px] font-medium">Tiếp tục với Google</span>
             </button>
-          </form>
-        ) : (
-          <form onSubmit={submitSignup} className="space-y-3">
+          </form> :
+
+        <form onSubmit={submitSignup} className="space-y-3">
             <Field id="su-email" icon={User} type="email" value={suEmail} onChange={(e) => setSuEmail(e.target.value)} placeholder="Nhập tên tài khoản" error={suErr.email} autoComplete="email" helper="Vui lòng nhập 6–20 chữ cái, số hoặc tổ hợp" />
             <Field id="su-pw" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="Nhập mật khẩu" error={suErr.password} autoComplete="new-password" helper="Vui lòng nhập tổ hợp chữ cái và số từ 6 đến 16 chữ số" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
             <Field id="su-pw2" icon={Lock} type={showPw2 ? "text" : "password"} value={suPw2} onChange={(e) => setSuPw2(e.target.value)} placeholder="Vui lòng nhập lại mật khẩu" error={suErr.confirm} autoComplete="new-password" helper="Vui lòng nhập tổ hợp chữ cái và số từ 6 đến 16 chữ số" right={<EyeToggle show={showPw2} onToggle={() => setShowPw2(!showPw2)} />} />
@@ -248,9 +248,9 @@ export default function AuthCard({ mode = "login" }) {
                 <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
                 <Input value={suCaptcha} onChange={(e) => setSuCaptcha(e.target.value)} placeholder="Vui lòng nhập CAPTCHA" className="h-12 pl-10 pr-28 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder:text-white/35 focus-visible:ring-[#ff4d4f]/40" />
                 <div className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 px-2 rounded-lg bg-black/70 flex items-center gap-1 select-none">
-                  {captchaCode.split("").map((d, i) => (
-                    <span key={i} className="font-serif text-white text-[15px] font-bold" style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 8}deg)`, color: i % 2 ? "#ffd1d1" : "#fff" }}>{d}</span>
-                  ))}
+                  {captchaCode.split("").map((d, i) =>
+                <span key={i} className="font-serif text-white text-[15px] font-bold" style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 8}deg)`, color: i % 2 ? "#ffd1d1" : "#fff" }}>{d}</span>
+                )}
                 </div>
               </div>
               {suErr.captcha && <p className="text-[#ff6b6b] text-[11px] pl-1">{suErr.captcha}</p>}
@@ -271,42 +271,42 @@ export default function AuthCard({ mode = "login" }) {
               Đăng ký ngay
             </CTA>
           </form>
-        )}
+        }
       </div>
 
       {/* Language selector */}
       <div className="mt-auto pt-6">
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5">
-          {LANGS.map((l) => (
-            <button key={l} onClick={() => setLang(l)} className={`text-[12px] transition-colors ${lang === l ? "text-[#ff4d4f] font-medium" : "text-white/45 hover:text-white/70"}`}>{l}</button>
-          ))}
+          {LANGS.map((l) =>
+          <button key={l} onClick={() => setLang(l)} className={`text-[12px] transition-colors ${lang === l ? "text-[#ff4d4f] font-medium" : "text-white/45 hover:text-white/70"}`}>{l}</button>
+          )}
         </div>
       </div>
 
       <SupportButton onClick={() => setSupportOpen(true)} />
       <SupportChat open={supportOpen} onOpenChange={setSupportOpen} />
-    </Shell>
-  );
+    </Shell>);
+
 }
 
 function CTA({ children, ...props }) {
   return (
     <button {...props} className="w-full h-12 rounded-xl bg-[#ff4d4f] text-white font-bold text-[15px] shadow-[0_8px_24px_rgba(255,77,79,0.35)] active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center">
       {children}
-    </button>
-  );
+    </button>);
+
 }
 
 function SupportButton({ onClick }) {
   return (
     <button onClick={onClick} aria-label="Hỗ trợ" className="fixed right-4 bottom-5 z-30 w-12 h-12 rounded-full bg-gradient-to-br from-[#ff8a3c] to-[#ff4d4f] flex items-center justify-center shadow-[0_8px_24px_rgba(255,77,79,0.45)] active:scale-95 transition-transform">
       <Headphones className="w-6 h-6 text-white" />
-    </button>
-  );
+    </button>);
+
 }
 
 function Shell({ children }) {
-  const buildings = useMemo(() => Array.from({ length: 14 }, (_, i) => 30 + ((i * 37) % 70)), []);
+  const buildings = useMemo(() => Array.from({ length: 14 }, (_, i) => 30 + i * 37 % 70), []);
   return (
     <main className="max-w-[480px] w-full mx-auto h-[100dvh] relative overflow-hidden bg-[#0b0e1e] flex flex-col font-sans">
       <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_18%_12%,rgba(112,51,255,0.18),transparent_42%),radial-gradient(circle_at_82%_16%,rgba(75,0,255,0.16),transparent_45%),radial-gradient(circle_at_50%_88%,rgba(255,77,79,0.10),transparent_50%)]" />
@@ -315,9 +315,9 @@ function Shell({ children }) {
       <div className="absolute bottom-0 inset-x-0 h-44 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e1e] via-[#0b0e1e]/70 to-transparent" />
         <div className="absolute bottom-0 inset-x-0 flex items-end justify-center gap-1 opacity-50 px-2">
-          {buildings.map((h, i) => (
-            <div key={i} className="flex-1 max-w-[26px] bg-[#1a2040] rounded-t-sm" style={{ height: h }} />
-          ))}
+          {buildings.map((h, i) =>
+          <div key={i} className="flex-1 max-w-[26px] bg-[#1a2040] rounded-t-sm" style={{ height: h }} />
+          )}
         </div>
         {/* fireworks */}
         <span className="absolute top-6 left-1/4 w-1.5 h-1.5 rounded-full bg-[#ff4d4f] blur-[2px]" />
@@ -328,21 +328,21 @@ function Shell({ children }) {
       <div className="relative z-10 flex-1 flex flex-col px-5 py-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {children}
       </div>
-    </main>
-  );
+    </main>);
+
 }
 
 function Brand() {
   return (
     <div className="flex flex-col items-center text-center mt-6">
       <div className="w-24 h-24 relative">
-        <Image
-          src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/237620199_image.png"
-          alt="Sands logo"
-          fittingType="fit"
-          className="w-full h-full object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]"
-        />
+        <Image src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/b018f6134_image-Photoroom.png"
+
+        alt="Sands logo"
+        fittingType="fit"
+        className="w-full h-full object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)]" />
+        
       </div>
-    </div>
-  );
+    </div>);
+
 }
