@@ -6,7 +6,6 @@ import { safeReturnTo } from "@/lib/authReturnTo";
 import {
   Eye, EyeOff, Loader2, Lock, User, Shield, ArrowLeft, X, Headphones, Gem,
 } from "lucide-react";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
 // --- validators ---
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
@@ -151,10 +150,6 @@ export default function AuthCard({ mode = "login" }) {
   const [agree, setAgree] = useState(false);
   const [suErr, setSuErr] = useState({});
 
-  // OTP verification step
-  const [showOtp, setShowOtp] = useState(false);
-  const [otpCode, setOtpCode] = useState("");
-
   const returnTo = safeReturnTo();
 
   // ---- handleLogin (Role-Based Routing) ----
@@ -199,37 +194,18 @@ export default function AuthCard({ mode = "login" }) {
     setLoading(true);
     try {
       const email = emailForSdk(suAccount);
+      // Đăng ký trực tiếp (1 bước, không OTP)
       await base44.auth.register({ email, password: suPw });
-      setShowOtp(true);
-      toast({ title: "Mã xác nhận đã gửi", description: isEmail(suAccount) ? `Kiểm tra email ${suAccount}` : "Đã gửi mã xác nhận" });
+      // Tự động đăng nhập → set token/session
+      await base44.auth.loginViaEmailPassword(email, suPw);
+      let role = "user";
+      try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
+      toast({ title: "Đăng ký thành công", description: "Tài khoản đã được tạo" });
+      window.location.href = role === "admin" ? "/admin" : returnTo;
     } catch (err) {
       toast({ title: "Đăng ký thất bại", description: err.message || "Không thể tạo tài khoản", variant: "destructive" });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const verifyOtp = async () => {
-    setLoading(true);
-    try {
-      const result = await base44.auth.verifyOtp({ email: emailForSdk(suAccount), otpCode });
-      if (result?.access_token) base44.auth.setToken(result.access_token);
-      let role = "user";
-      try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
-      window.location.href = role === "admin" ? "/admin" : returnTo;
-    } catch (err) {
-      toast({ title: "Xác minh thất bại", description: err.message || "Mã không hợp lệ", variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resendOtp = async () => {
-    try {
-      await base44.auth.resendOtp(emailForSdk(suAccount));
-      toast({ title: "Đã gửi lại mã", description: "Kiểm tra email của bạn" });
-    } catch (err) {
-      toast({ title: "Không gửi được mã", description: err.message, variant: "destructive" });
     }
   };
 
@@ -240,37 +216,6 @@ export default function AuthCard({ mode = "login" }) {
   );
 
   const onSupport = () => toast({ title: "Hỗ trợ 24/7", description: "Vui lòng đăng nhập để chat với CSKH." });
-
-  // ---- OTP verification step ----
-  if (showOtp) {
-    return (
-      <>
-        <Shell>
-          <Brand />
-          <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md p-5 mt-6">
-            <h2 className="text-white font-bold text-lg">Xác minh email</h2>
-            <p className="text-white/55 text-[13px] mt-1">Mã đã gửi tới <span className="text-[#FFD700]">{isEmail(suAccount) ? suAccount : emailForSdk(suAccount)}</span></p>
-            <div className="flex justify-center my-5">
-              <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode} autoFocus autoComplete="one-time-code">
-                <InputOTPGroup>
-                  {[0, 1, 2, 3, 4, 5].map((i) => <InputOTPSlot key={i} index={i} className="border-white/20 bg-white/5 text-white" />)}
-                </InputOTPGroup>
-              </InputOTP>
-            </div>
-            <CTA onClick={verifyOtp} disabled={loading || otpCode.length < 6}>
-              {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Xác nhận
-            </CTA>
-            <p className="text-center text-white/55 text-[12px] mt-4">
-              Không nhận được mã?{" "}
-              <button onClick={resendOtp} className="text-[#FFD700] font-medium hover:underline">Gửi lại</button>
-            </p>
-          </div>
-        </Shell>
-        <SupportFab onClick={onSupport} />
-      </>
-    );
-  }
 
   if (mode === "register") {
     return (
