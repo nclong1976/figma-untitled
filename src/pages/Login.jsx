@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { useAuth } from "@/lib/AuthContext";
 
 // Ánh xạ tài khoản đăng nhập → email SDK.
 // Bỏ qua kiểm tra định dạng Gmail / OTP: tài khoản admin (admin, admin1) → email admin thật,
@@ -18,6 +19,7 @@ const emailForSdk = (account) => {
 
 export default function Login() {
   const navigate = useNavigate();
+  const { setSession } = useAuth();
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,11 +30,11 @@ export default function Login() {
     if (loading) return;
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(emailForSdk(account), password);
-      let role = "user";
-      try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
-      // Role-Based Routing: admin → /admin, user → /
-      window.location.href = role === "admin" ? "/admin" : returnTo;
+      const { user: loginUser } = await base44.auth.loginViaEmailPassword(emailForSdk(account), password);
+      const role = loginUser?.role || (account.trim().toLowerCase().startsWith('admin') ? 'admin' : 'user');
+      setSession(loginUser || { email: emailForSdk(account), role });
+      // Role-Based Routing: admin → /admin, user → Trang chủ
+      navigate(role === 'admin' ? '/admin' : returnTo, { replace: true });
     } catch (err) {
       toast({ title: "Đăng nhập thất bại", description: err.message || "Tài khoản hoặc mật khẩu không đúng", variant: "destructive" });
     } finally {

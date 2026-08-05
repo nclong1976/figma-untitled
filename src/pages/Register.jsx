@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { useAuth } from "@/lib/AuthContext";
 
 const emailForSdk = (account) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account || "") ? account : `${account}@app.internal`);
 
@@ -23,6 +24,7 @@ const inputCls = "bg-transparent outline-none w-full text-figma-17 font-normal f
 
 export default function Register() {
   const navigate = useNavigate();
+  const { setSession } = useAuth();
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -65,11 +67,10 @@ export default function Register() {
     try {
       const email = emailForSdk(account);
       await base44.auth.register({ email, password });
-      await base44.auth.loginViaEmailPassword(email, password);
-      let role = "user";
-      try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
+      const { user: regUser } = await base44.auth.loginViaEmailPassword(email, password);
+      setSession(regUser || { email, role: 'user' });
       toast({ title: "Đăng ký thành công", description: "Tài khoản đã được tạo" });
-      window.location.href = role === "admin" ? "/admin" : "/";
+      navigate(regUser?.role === 'admin' ? '/admin' : '/', { replace: true });
     } catch (err) {
       toast({ title: "Đăng ký thất bại", description: err.message || "Không thể tạo tài khoản", variant: "destructive" });
     } finally {

@@ -98,20 +98,32 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setIsLoadingAuth(false);
       setAuthChecked(true);
+      try { localStorage.setItem('user', JSON.stringify(currentUser)); } catch (e) { /* ignore */ }
     } catch (error) {
       console.error('User auth check failed:', error);
-      setIsLoadingAuth(false);
-      setIsAuthenticated(false);
-      setAuthChecked(true);
-      
-      // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
-        setAuthError({
-          type: 'auth_required',
-          message: 'Authentication required'
-        });
+      // Fall back to cached session so a valid login isn't bounced on refresh
+      let cached = null;
+      try { cached = JSON.parse(localStorage.getItem('user') || 'null'); } catch (e) { /* ignore */ }
+      if (cached) {
+        setUser(cached);
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
       }
+      setIsLoadingAuth(false);
+      setAuthChecked(true);
     }
+  };
+
+  // Cập nhật tức thì phiên sau khi đăng nhập/đăng ký thành công:
+  // set user state + localStorage('user') + tắt loading để ProtectedRoute không kẹt/đẩy về /login
+  const setSession = (userData) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    setAuthChecked(true);
+    setIsLoadingAuth(false);
+    setAuthError(null);
+    try { localStorage.setItem('user', JSON.stringify(userData)); } catch (e) { /* ignore */ }
   };
 
   // Hàm đăng xuất dùng chung trên toàn ứng dụng:
@@ -147,7 +159,8 @@ export const AuthProvider = ({ children }) => {
       logout,
       navigateToLogin,
       checkUserAuth,
-      checkAppState
+      checkAppState,
+      setSession
     }}>
       {children}
     </AuthContext.Provider>
