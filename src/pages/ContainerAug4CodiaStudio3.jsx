@@ -28,7 +28,7 @@ export default function ContainerAug4CodiaStudio3() {
       return;
     }
     if (balance < tier.minBalance) {
-      toast({ title: "Số dư không đủ để vào phòng này, vui lòng nạp thêm", variant: "destructive" });
+      toast({ title: "Số dư không đủ để vào phòng, vui lòng nạp tiền ngay", variant: "destructive" });
       return;
     }
     navigate(`/choi-game/${game.gameId}?tier=${tier.id}&g=${game.id}`);

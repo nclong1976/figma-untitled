@@ -19,7 +19,7 @@ import BetHistoryModal from "@/components/profile/BetHistoryModal";
 import { GAMES, CATEGORIES, ANNOUNCEMENTS } from "@/components/home/homeData";
 import { makeT } from "@/components/home/i18n";
 import { seedLinked, seedBets, MIN_TURNOVER } from "@/components/profile/profileData";
-import { resolveInitialTier } from "@/components/lobby/lobbyData";
+import { resolveInitialTier, getTier } from "@/components/lobby/lobbyData";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -114,6 +114,10 @@ export default function Home() {
       return;
     }
     const tierId = resolveInitialTier(balance);
+    if (balance < getTier(tierId).minBalance) {
+      toast({ title: "Số dư không đủ để vào phòng, vui lòng nạp tiền ngay", variant: "destructive" });
+      return;
+    }
     navigate(`/choi-game/${game.gameId}?tier=${tierId}&g=${game.id}`);
   };
 

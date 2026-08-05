@@ -119,10 +119,10 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
 
       {/* Live status bar */}
       <section className="relative z-10 shrink-0 px-3 py-1.5 bg-[#0d1226] border-b border-white/10">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <p className="text-[#d99] text-[11px] shrink-0">{tierLabel ? `${tierLabel} · ` : ""}Kỳ {period}</p>
-          <div className="flex items-center gap-1">
-            {drawn.map((n, i) => <Ball key={i} number={n} size={22} />)}
+          <div className="flex items-center gap-1 flex-wrap">
+            {drawn.map((n, i) => <Ball key={i} number={n} size={20} />)}
           </div>
           <div className="ml-auto flex items-center gap-1.5 text-[11px] shrink-0">
             <span className="text-white/55">Tổng</span>
@@ -192,10 +192,10 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
                   <button
                     key={i}
                     onClick={() => !bettingClosed && toggleCell(activeTab.id, activeTab.label, item)}
-                    className={`flex flex-col items-center justify-center h-[70px] bg-white transition-colors ${sel ? "bg-[#ffe9d6] ring-2 ring-[#ff6600] inset-shadow" : "hover:bg-[#fafafa]"}`}
+                    className={`flex flex-col items-center justify-center h-[64px] bg-white transition-colors ${sel ? "bg-[#ffe9d6] ring-2 ring-[#ff6600] inset-shadow" : "hover:bg-[#fafafa]"}`}
                   >
-                    <p className={`text-[14px] font-semibold leading-tight ${sel ? "text-[#ff6600]" : "text-[#333]"}`}>{item.label}</p>
-                    <p className="text-[12px] text-[#999] mt-0.5">{item.odds}</p>
+                    <p className={`text-[13px] font-semibold leading-tight ${sel ? "text-[#ff6600]" : "text-[#333]"}`}>{item.label}</p>
+                    <p className="text-[11px] text-[#999] mt-0.5">{item.odds}</p>
                   </button>
                 );
               })}
@@ -214,30 +214,30 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
           </div>
         </div>
 
-        <div className="flex justify-between px-1 mt-1.5">
+        <div className="flex justify-between gap-1 px-0.5 mt-1.5">
           {tierChips.map((c) => (
             <button
               key={c}
               onClick={() => { setSelectedChip(c); setBetAmount(c); }}
-              className="relative w-[48px] h-[48px] flex items-center justify-center transition-transform active:scale-95"
+              className="relative w-[44px] h-[44px] flex items-center justify-center transition-transform active:scale-95"
             >
               <span className={`absolute inset-0 rounded-full ${selectedChip === c ? "bg-[#FFD700] ring-2 ring-white" : "bg-[#7a3d00] ring-1 ring-[#a85a00]"}`} />
-              <span className={`relative z-10 text-[13px] font-bold ${selectedChip === c ? "text-[#5a2d00]" : "text-[#ffd9a0]"}`}>{c}</span>
+              <span className={`relative z-10 text-[12px] font-bold ${selectedChip === c ? "text-[#5a2d00]" : "text-[#ffd9a0]"}`}>{c}</span>
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-1.5 mt-1.5">
+        <div className="flex items-center gap-1 mt-1.5">
           <p className="text-white text-[12px] shrink-0">Số tiền:</p>
           <input
             type="number"
             min="0"
             value={betAmount}
             onChange={(e) => setBetAmount(Math.max(0, Number(e.target.value)))}
-            className="flex-1 h-9 rounded-lg bg-white px-2 text-center text-[#333] text-[14px] font-semibold outline-none min-w-0"
+            className="flex-1 h-9 rounded-lg bg-white px-2 text-center text-[#333] text-[13px] font-semibold outline-none min-w-0"
           />
-          <button onClick={handleAdd} className="h-9 px-3 rounded-lg bg-[#4a097f] text-white text-[13px] font-semibold shrink-0">Mua hàng</button>
-          <button onClick={handleReset} className="h-9 px-3 rounded-lg bg-[#cc0000] text-white text-[13px] font-semibold shrink-0">Đặt lại</button>
+          <button onClick={handleAdd} className="h-9 px-2.5 rounded-lg bg-[#4a097f] text-white text-[12px] font-semibold shrink-0">Mua hàng</button>
+          <button onClick={handleReset} className="h-9 px-2.5 rounded-lg bg-[#cc0000] text-white text-[12px] font-semibold shrink-0">Đặt lại</button>
         </div>
 
         <button
