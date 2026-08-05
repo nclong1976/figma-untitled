@@ -12,7 +12,10 @@ const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
 const isPhone = (v) => /^[0-9]{6,15}$/.test(v || "");
 const isUsername = (v) => /^[A-Za-z0-9]{6,20}$/.test(v || "");
 const isValidAccount = (v) => isUsername(v) || isEmail(v) || isPhone(v);
-const isAlnum = (v) => /^[A-Za-z0-9]{8,16}$/.test(v || "");
+// Mật khẩu đăng nhập: đúng 6 ký tự (chữ cái hoặc chữ số)
+const isLoginPw = (v) => /^[A-Za-z0-9]{6}$/.test(v || "");
+// Mật khẩu rút tiền: đúng 6 chữ số (PIN)
+const isPin = (v) => /^[0-9]{6}$/.test(v || "");
 // SDK yêu cầu email để tạo Auth User → tự tạo email ảo khi người dùng nhập username/phone
 const emailForSdk = (account) => (isEmail(account) ? account : `${account}@app.internal`);
 
@@ -20,12 +23,12 @@ function genCaptcha() {
   return String(Math.floor(1000 + Math.random() * 9000));
 }
 
-function WhiteField({ icon: Icon, type = "text", value, onChange, placeholder, right, autoComplete, id }) {
+function WhiteField({ icon: Icon, type = "text", value, onChange, placeholder, right, autoComplete, id, maxLength, inputMode }) {
   return (
     <div className="relative">
       <Icon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9a9a9a]" />
       <input
-        id={id} type={type} value={value} onChange={onChange} placeholder={placeholder} autoComplete={autoComplete}
+        id={id} type={type} value={value} onChange={onChange} placeholder={placeholder} autoComplete={autoComplete} maxLength={maxLength} inputMode={inputMode}
         className="w-full h-12 pl-11 pr-10 rounded-xl bg-white text-[#222] placeholder:text-[#a0a0a0] text-sm outline-none focus:ring-2 focus:ring-[#ff4d4f]/40"
       />
       {right}
@@ -133,7 +136,7 @@ export default function AuthCard({ mode = "login" }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
-  const [showPw2, setShowPw2] = useState(false);
+  const [showTxPw, setShowTxPw] = useState(false);
 
   // sign-in
   const [liAccount, setLiAccount] = useState("");
@@ -143,7 +146,6 @@ export default function AuthCard({ mode = "login" }) {
   // sign-up (Tên tài khoản / Số điện thoại / Email)
   const [suAccount, setSuAccount] = useState("");
   const [suPw, setSuPw] = useState("");
-  const [suPw2, setSuPw2] = useState("");
   const [suTxPw, setSuTxPw] = useState("");
   const [captcha, setCaptcha] = useState(genCaptcha());
   const [captchaInput, setCaptchaInput] = useState("");
@@ -157,7 +159,7 @@ export default function AuthCard({ mode = "login" }) {
     e.preventDefault();
     const errs = {};
     if (!isValidAccount(liAccount)) errs.account = "Vui lòng nhập tên tài khoản hợp lệ";
-    if (!liPw) errs.password = "Vui lòng nhập mật khẩu";
+    if (!isLoginPw(liPw)) errs.password = "Mật khẩu phải đúng 6 ký tự (chữ hoặc số)";
     setLiErr(errs);
     if (Object.keys(errs).length) return;
     setLoading(true);
@@ -178,9 +180,8 @@ export default function AuthCard({ mode = "login" }) {
   const validateSignup = () => {
     const errs = {};
     if (!isValidAccount(suAccount)) errs.account = "Tên tài khoản 6–20 chữ cái/số (hoặc email/SĐT)";
-    if (!isAlnum(suPw)) errs.password = "Mật khẩu 8–16 chữ cái và số";
-    if (suPw !== suPw2) errs.confirm = "Mật khẩu không khớp";
-    if (!isAlnum(suTxPw)) errs.tx = "Mật khẩu thanh toán 8–16 chữ cái và số";
+    if (!isLoginPw(suPw)) errs.password = "Nhập đúng 6 ký tự (chữ hoặc số)";
+    if (!isPin(suTxPw)) errs.tx = "Mật khẩu rút tiền phải đúng 6 chữ số";
     if (captchaInput !== captcha) errs.captcha = "Mã xác nhận không đúng";
     if (!agree) errs.terms = "Vui lòng đồng ý điều khoản";
     return errs;
@@ -228,16 +229,12 @@ export default function AuthCard({ mode = "login" }) {
               <Helper err={suErr.account}>Tên tài khoản 6–20 chữ cái và số (không ký tự đặc biệt)</Helper>
             </div>
             <div>
-              <WhiteField id="su-pw" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="Nhập mật khẩu" autoComplete="new-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
-              <Helper err={suErr.password}>Vui lòng nhập tổ hợp chữ cái và số từ 8 đến 16 chữ số</Helper>
+              <WhiteField id="su-pw" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="Nhập mật khẩu đăng nhập" autoComplete="new-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
+              <Helper err={suErr.password}>Nhập đúng 6 ký tự (chữ hoặc số)</Helper>
             </div>
             <div>
-              <WhiteField id="su-pw2" icon={Lock} type={showPw2 ? "text" : "password"} value={suPw2} onChange={(e) => setSuPw2(e.target.value)} placeholder="Vui lòng nhập lại mật khẩu" autoComplete="new-password" right={<EyeToggle show={showPw2} onToggle={() => setShowPw2(!showPw2)} />} />
-              <Helper err={suErr.confirm}>Vui lòng nhập tổ hợp chữ cái và số từ 8 đến 16 chữ số</Helper>
-            </div>
-            <div>
-              <WhiteField id="su-tx" icon={Lock} type="password" value={suTxPw} onChange={(e) => setSuTxPw(e.target.value)} placeholder="Đặt mật khẩu thanh toán" />
-              <Helper err={suErr.tx}>Vui lòng nhập tổ hợp chữ cái và số từ 8 đến 16 chữ số</Helper>
+              <WhiteField id="su-tx" icon={Lock} type={showTxPw ? "text" : "password"} value={suTxPw} onChange={(e) => setSuTxPw(e.target.value)} placeholder="Đặt mật khẩu rút tiền (6 số)" autoComplete="off" maxLength={6} inputMode="numeric" right={<EyeToggle show={showTxPw} onToggle={() => setShowTxPw(!showTxPw)} />} />
+              <Helper err={suErr.tx}>Mật khẩu rút tiền là 6 chữ số (PIN)</Helper>
             </div>
             <div className="flex gap-2">
               <div className="flex-1">
