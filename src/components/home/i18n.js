@@ -1,0 +1,88 @@
+// Lightweight i18n for the Home page.
+
+export const LANGUAGES = [
+  { code: "vi", label: "Vietnam" },
+  { code: "zh", label: "中文" },
+  { code: "zh-TW", label: "繁體" },
+  { code: "ja", label: "日本語" },
+  { code: "ru", label: "Русский" },
+  { code: "en", label: "English Malay" },
+];
+
+const dict = {
+  vi: {
+    deposit: "Nạp tiền ngay",
+    withdraw: "Rút tiền mặt",
+    history: "Lịch sử đặt cược",
+    support: "Hỗ trợ trực tuyến",
+    lobby: "Sảnh chơi",
+    search: "Tìm kiếm game...",
+    cat_all: "Tất cả",
+    cat_lucky28: "May mắn 28",
+    cat_xoso: "Xổ số",
+    cat_pk10: "PK10",
+    cat_slot: "Slot",
+    cat_casino: "Casino",
+    maintenance: "Game đang bảo trì",
+    badge_hot: "Hot",
+    badge_new: "Mới",
+    maintenance_badge: "Bảo trì",
+    shortcuts: "Lối tắt",
+    home: "Trang chủ",
+    awards: "Giải thưởng",
+    profile: "Của tôi",
+    need_login: "Vui lòng đăng nhập để chơi",
+  },
+  zh: {
+    deposit: "立即充值",
+    withdraw: "提现",
+    history: "投注记录",
+    support: "在线客服",
+    lobby: "游戏大厅",
+    search: "搜索游戏...",
+    cat_all: "全部",
+    cat_lucky28: "幸运28",
+    cat_xoso: "彩票",
+    cat_pk10: "PK10",
+    cat_slot: "老虎机",
+    cat_casino: "赌场",
+    maintenance: "游戏维护中",
+    badge_hot: "热门",
+    badge_new: "新",
+    maintenance_badge: "维护",
+    shortcuts: "快捷方式",
+    home: "首页",
+    awards: "奖励",
+    profile: "我的",
+    need_login: "请登录后游戏",
+  },
+  en: {
+    deposit: "Deposit now",
+    withdraw: "Withdraw",
+    history: "Bet history",
+    support: "Live support",
+    lobby: "Game lobby",
+    search: "Search games...",
+    cat_all: "All",
+    cat_lucky28: "Lucky 28",
+    cat_xoso: "Lotto",
+    cat_pk10: "PK10",
+    cat_slot: "Slot",
+    cat_casino: "Casino",
+    maintenance: "Game under maintenance",
+    badge_hot: "Hot",
+    badge_new: "New",
+    maintenance_badge: "Maintenance",
+    shortcuts: "Shortcuts",
+    home: "Home",
+    awards: "Rewards",
+    profile: "Profile",
+    need_login: "Please log in to play",
+  },
+};
+
+export function makeT(lang) {
+  const code = lang && lang.startsWith("zh") ? "zh" : dict[lang] ? lang : "en";
+  const base = dict[code] || dict.en;
+  return (k) => base[k] ?? dict.en[k] ?? k;
+}
