@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,41 +7,23 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import SupportChat from "@/components/profile/SupportChat";
 import {
-  Eye, EyeOff, Loader2, Mail, Lock, User, Phone, Gift, KeyRound, Gem, Send, MessageCircle,
+  Eye, EyeOff, Loader2, Mail, Lock, User, KeyRound, Gem, Send, MessageCircle,
+  Shield, ChevronLeft, X, Headphones,
 } from "lucide-react";
 
 // --- validators ---
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
-const isPhone = (v) => /^[0-9+]{10,13}$/.test(v || "");
 const isStrong = (v) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(v || "");
-const isName = (v) => /^[A-Za-z][A-Za-z0-9 ]{1,}$/.test(v || "");
 
-const fieldCls = "h-12 pl-10 pr-10 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-white/35 focus-visible:ring-[#FFD700]/60 focus-visible:border-[#FFD700]/40";
+const fieldCls = "h-12 pl-10 pr-10 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder:text-white/35 focus-visible:ring-[#ff4d4f]/40 focus-visible:border-[#ff4d4f]/50";
+const LANGS = ["Vietnam", "中文", "繁體", "日本語", "Русский", "English", "Malay"];
 
-function SocialButtons({ onGoogle, onSoon }) {
+function Field({ icon: Icon, id, label, type = "text", value, onChange, placeholder, error, helper, right, autoComplete }) {
   return (
-    <div className="grid grid-cols-3 gap-2 mt-4">
-      <button type="button" onClick={onGoogle} className="h-11 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center gap-1.5 active:scale-95 transition-transform">
-        <GoogleIcon className="w-4 h-4" />
-        <span className="text-white/80 text-[12px] font-medium">Google</span>
-      </button>
-      <button type="button" onClick={onSoon} className="h-11 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center gap-1.5 active:scale-95 transition-transform">
-        <Send className="w-4 h-4 text-[#29A9EA]" />
-        <span className="text-white/80 text-[12px] font-medium">Telegram</span>
-      </button>
-      <button type="button" onClick={onSoon} className="h-11 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center gap-1.5 active:scale-95 transition-transform">
-        <MessageCircle className="w-4 h-4 text-[#06C755]" />
-        <span className="text-white/80 text-[12px] font-medium">Line</span>
-      </button>
-    </div>
-  );
-}
-
-function Field({ icon: Icon, id, label, type = "text", value, onChange, placeholder, error, right, autoComplete }) {
-  return (
-    <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-white/70 text-[13px]">{label}</Label>
+    <div className="space-y-1">
+      {label && <Label htmlFor={id} className="text-white/70 text-[13px]">{label}</Label>}
       <div className="relative">
         <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" aria-hidden="true" />
         <Input
@@ -50,17 +32,22 @@ function Field({ icon: Icon, id, label, type = "text", value, onChange, placehol
         />
         {right}
       </div>
+      {helper && !error && <p className="text-[11px] text-white/40 pl-1">{helper}</p>}
       {error && <p className="text-[#ff6b6b] text-[11px] pl-1">{error}</p>}
     </div>
   );
 }
 
 export default function AuthCard({ mode = "login" }) {
-  const [tab, setTab] = useState(mode); // "login" | "register"
+  const navigate = useNavigate();
+  const [tab, setTab] = useState(mode);
   const [loading, setLoading] = useState(false);
   const [showPw, setShowPw] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
+  const [showPay, setShowPay] = useState(false);
   const [remember, setRemember] = useState(true);
+  const [lang, setLang] = useState("Vietnam");
+  const [supportOpen, setSupportOpen] = useState(false);
 
   // sign-in
   const [liEmail, setLiEmail] = useState("");
@@ -68,16 +55,16 @@ export default function AuthCard({ mode = "login" }) {
   const [liErr, setLiErr] = useState({});
 
   // sign-up
-  const [suName, setSuName] = useState("");
-  const [suUser, setSuUser] = useState("");
-  const [suPhone, setSuPhone] = useState("");
   const [suEmail, setSuEmail] = useState("");
   const [suPw, setSuPw] = useState("");
   const [suPw2, setSuPw2] = useState("");
-  const [suRef, setSuRef] = useState("");
+  const [suPay, setSuPay] = useState("");
+  const [captchaCode] = useState(() => String(Math.floor(1000 + Math.random() * 9000)));
+  const [suCaptcha, setSuCaptcha] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [suErr, setSuErr] = useState({});
 
-  // OTP step (register)
+  // OTP step
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
 
@@ -111,12 +98,12 @@ export default function AuthCard({ mode = "login" }) {
   // ---- sign up ----
   const validateSignup = () => {
     const errs = {};
-    if (!isName(suName)) errs.name = "Họ tên chỉ gồm chữ cái không dấu";
-    if (!suUser.trim()) errs.username = "Vui lòng nhập tên đăng nhập";
-    if (!isPhone(suPhone)) errs.phone = "Số điện thoại không hợp lệ";
     if (!isEmail(suEmail)) errs.email = "Email không đúng định dạng";
     if (!isStrong(suPw)) errs.password = "Mật khẩu ≥ 8 ký tự, gồm chữ, số và ký tự đặc biệt";
     if (suPw !== suPw2) errs.confirm = "Mật khẩu không khớp";
+    if (!suPay) errs.pay = "Vui lòng đặt mật khẩu thanh toán";
+    if (suCaptcha !== captchaCode) errs.captcha = "Mã CAPTCHA không đúng";
+    if (!agreed) errs.terms = "Vui lòng đồng ý điều khoản";
     return errs;
   };
 
@@ -142,7 +129,7 @@ export default function AuthCard({ mode = "login" }) {
     try {
       const result = await base44.auth.verifyOtp({ email: suEmail, otpCode });
       if (result?.access_token) base44.auth.setToken(result.access_token);
-      try { await base44.auth.updateMe({ full_name: suName }); } catch { /* non-critical */ }
+      try { await base44.auth.updateMe({ full_name: suEmail.split("@")[0] }); } catch { /* non-critical */ }
       window.location.href = returnTo;
     } catch (err) {
       toast({ title: "Xác minh thất bại", description: err.message || "Mã không hợp lệ", variant: "destructive" });
@@ -171,9 +158,9 @@ export default function AuthCard({ mode = "login" }) {
     return (
       <Shell>
         <Brand />
-        <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md p-5 mt-5">
+        <div className="rounded-2xl bg-white/[0.06] border border-white/10 backdrop-blur-md p-5 mt-5">
           <h2 className="text-white font-bold text-lg">Xác minh email</h2>
-          <p className="text-white/55 text-[13px] mt-1">Mã đã gửi tới <span className="text-[#FFD700]">{suEmail}</span></p>
+          <p className="text-white/55 text-[13px] mt-1">Mã đã gửi tới <span className="text-[#ff4d4f]">{suEmail}</span></p>
           <div className="flex justify-center my-5">
             <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode} autoFocus autoComplete="one-time-code">
               <InputOTPGroup>
@@ -187,107 +174,157 @@ export default function AuthCard({ mode = "login" }) {
           </CTA>
           <p className="text-center text-white/55 text-[12px] mt-4">
             Không nhận được mã?{" "}
-            <button onClick={resendOtp} className="text-[#FFD700] font-medium hover:underline">Gửi lại</button>
+            <button onClick={resendOtp} className="text-[#ff4d4f] font-medium hover:underline">Gửi lại</button>
           </p>
         </div>
+        <SupportButton onClick={() => setSupportOpen(true)} />
+        <SupportChat open={supportOpen} onOpenChange={setSupportOpen} />
       </Shell>
     );
   }
 
   return (
     <Shell>
+      {/* Top bar */}
+      <div className="flex items-center">
+        <button onClick={() => navigate("/")} className="p-1.5 -ml-1.5 rounded-lg hover:bg-white/10"><ChevronLeft className="w-5 h-5 text-white/70" /></button>
+        <h1 className={`flex-1 text-center text-white font-semibold text-[16px] ${tab === "register" ? "" : "opacity-0"}`}>Đăng ký miễn phí</h1>
+        <button onClick={() => navigate("/")} className="p-1.5 -mr-1.5 rounded-lg hover:bg-white/10"><X className="w-5 h-5 text-white/70" /></button>
+      </div>
+
       <Brand />
 
-      {/* Tab switcher */}
-      <div className="mt-6 grid grid-cols-2 p-1 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+      {/* Tabs */}
+      <div className="mt-6 flex items-center gap-6 border-b border-white/10">
         {[
-          { id: "login", label: "Đăng nhập" },
-          { id: "register", label: "Đăng ký" },
+          { id: "login", label: "Đăng nhập tài khoản" },
+          { id: "register", label: "Đăng ký tài khoản" },
         ].map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={`h-10 rounded-xl text-[14px] font-semibold transition-all ${
-              tab === t.id ? "bg-gradient-to-r from-[#FFD700] to-[#FF8A00] text-[#1a1300] shadow-[0_4px_16px_rgba(255,165,0,0.35)]" : "text-white/55 hover:text-white"
-            }`}
-          >
+          <button key={t.id} onClick={() => setTab(t.id)} className={`pb-2.5 text-[14px] font-semibold relative transition-colors ${tab === t.id ? "text-white" : "text-white/45"}`}>
             {t.label}
+            {tab === t.id && <span className="absolute left-0 right-0 -bottom-px h-[2px] rounded-full bg-[#ff4d4f]" />}
           </button>
         ))}
       </div>
 
-      <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md p-5 mt-4">
+      <div className="mt-5">
         {tab === "login" ? (
-          <form onSubmit={submitLogin} className="space-y-4">
-            <Field
-              id="li-email" label="Email / Số điện thoại" icon={Mail}
-              type="email" value={liEmail} onChange={(e) => setLiEmail(e.target.value)}
-              placeholder="you@example.com" error={liErr.email} autoComplete="email"
-            />
-            <Field
-              id="li-pw" label="Mật khẩu" icon={Lock}
-              type={showPw ? "text" : "password"} value={liPw} onChange={(e) => setLiPw(e.target.value)}
-              placeholder="••••••••" error={liErr.password} autoComplete="current-password"
-              right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />}
-            />
+          <form onSubmit={submitLogin} className="space-y-3.5">
+            <Field id="li-email" icon={User} type="email" value={liEmail} onChange={(e) => setLiEmail(e.target.value)} placeholder="Nhập tên tài khoản" error={liErr.email} autoComplete="email" helper="Vui lòng nhập email hợp lệ" />
+            <Field id="li-pw" icon={Lock} type={showPw ? "text" : "password"} value={liPw} onChange={(e) => setLiPw(e.target.value)} placeholder="Nhập mật khẩu" error={liErr.password} autoComplete="current-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-white/65 text-[12px] cursor-pointer">
-                <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="accent-[#FFD700] w-4 h-4" />
+              <label className="flex items-center gap-2 text-white/60 text-[12px] cursor-pointer">
+                <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="accent-[#ff4d4f] w-4 h-4 rounded" />
                 Ghi nhớ đăng nhập
               </label>
-              <Link to="/forgot-password" className="text-[12px] text-[#FFD700] hover:underline">Quên mật khẩu?</Link>
+              <Link to="/forgot-password" className="text-[12px] text-[#ff4d4f] hover:underline">Quên mật khẩu?</Link>
             </div>
             <CTA type="submit" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Đăng Nhập
+              Đăng nhập
             </CTA>
+
+            <div className="flex items-center gap-3 mt-2">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-white/35 text-[11px]">hoặc</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+            <button type="button" onClick={onGoogle} className="w-full h-11 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center gap-2 active:scale-95 transition-transform">
+              <GoogleIcon className="w-4 h-4" />
+              <span className="text-white/85 text-[13px] font-medium">Tiếp tục với Google</span>
+            </button>
           </form>
         ) : (
-          <form onSubmit={submitSignup} className="space-y-3.5">
-            <Field id="su-name" label="Họ và tên" icon={User} value={suName} onChange={(e) => setSuName(e.target.value)} placeholder="Nguyen Van A" error={suErr.name} />
-            <Field id="su-user" label="Tên đăng nhập" icon={KeyRound} value={suUser} onChange={(e) => setSuUser(e.target.value)} placeholder="nguyenvana" error={suErr.username} />
-            <Field id="su-phone" label="Số điện thoại" icon={Phone} value={suPhone} onChange={(e) => setSuPhone(e.target.value)} placeholder="09xxxxxxxx" error={suErr.phone} />
-            <Field id="su-email" label="Email" icon={Mail} type="email" value={suEmail} onChange={(e) => setSuEmail(e.target.value)} placeholder="you@example.com" error={suErr.email} autoComplete="email" />
-            <Field id="su-pw" label="Mật khẩu" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="••••••••" error={suErr.password} autoComplete="new-password" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
-            <Field id="su-pw2" label="Nhập lại mật khẩu" icon={Lock} type={showPw2 ? "text" : "password"} value={suPw2} onChange={(e) => setSuPw2(e.target.value)} placeholder="••••••••" error={suErr.confirm} autoComplete="new-password" right={<EyeToggle show={showPw2} onToggle={() => setShowPw2(!showPw2)} />} />
-            <Field id="su-ref" label="Mã giới thiệu (tuỳ chọn)" icon={Gift} value={suRef} onChange={(e) => setSuRef(e.target.value)} placeholder="ABC123" />
+          <form onSubmit={submitSignup} className="space-y-3">
+            <Field id="su-email" icon={User} type="email" value={suEmail} onChange={(e) => setSuEmail(e.target.value)} placeholder="Nhập tên tài khoản" error={suErr.email} autoComplete="email" helper="Vui lòng nhập 6–20 chữ cái, số hoặc tổ hợp" />
+            <Field id="su-pw" icon={Lock} type={showPw ? "text" : "password"} value={suPw} onChange={(e) => setSuPw(e.target.value)} placeholder="Nhập mật khẩu" error={suErr.password} autoComplete="new-password" helper="Vui lòng nhập tổ hợp chữ cái và số từ 6 đến 16 chữ số" right={<EyeToggle show={showPw} onToggle={() => setShowPw(!showPw)} />} />
+            <Field id="su-pw2" icon={Lock} type={showPw2 ? "text" : "password"} value={suPw2} onChange={(e) => setSuPw2(e.target.value)} placeholder="Vui lòng nhập lại mật khẩu" error={suErr.confirm} autoComplete="new-password" helper="Vui lòng nhập tổ hợp chữ cái và số từ 6 đến 16 chữ số" right={<EyeToggle show={showPw2} onToggle={() => setShowPw2(!showPw2)} />} />
+            <Field id="su-pay" icon={Lock} type={showPay ? "text" : "password"} value={suPay} onChange={(e) => setSuPay(e.target.value)} placeholder="Đặt mật khẩu thanh toán" error={suErr.pay} helper="Vui lòng nhập tổ hợp chữ cái và số từ 6 đến 16 chữ số" right={<EyeToggle show={showPay} onToggle={() => setShowPay(!showPay)} />} />
+
+            {/* Captcha */}
+            <div className="space-y-1">
+              <div className="relative">
+                <Shield className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
+                <Input value={suCaptcha} onChange={(e) => setSuCaptcha(e.target.value)} placeholder="Vui lòng nhập CAPTCHA" className="h-12 pl-10 pr-28 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder:text-white/35 focus-visible:ring-[#ff4d4f]/40" />
+                <div className="absolute right-1.5 top-1/2 -translate-y-1/2 h-9 px-2 rounded-lg bg-black/70 flex items-center gap-1 select-none">
+                  {captchaCode.split("").map((d, i) => (
+                    <span key={i} className="font-serif text-white text-[15px] font-bold" style={{ transform: `rotate(${(i % 2 ? 1 : -1) * 8}deg)`, color: i % 2 ? "#ffd1d1" : "#fff" }}>{d}</span>
+                  ))}
+                </div>
+              </div>
+              {suErr.captcha && <p className="text-[#ff6b6b] text-[11px] pl-1">{suErr.captcha}</p>}
+            </div>
+
+            {/* Terms */}
+            <label className="flex items-start gap-2 cursor-pointer pt-1">
+              <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="accent-[#ff4d4f] w-4 h-4 mt-0.5 rounded shrink-0" />
+              <span className="text-white/70 text-[12px] leading-snug">
+                Tôi trên 18 tuổi và đồng ý chấp nhận{" "}
+                <span className="text-[#5b9bff] hover:underline">Điều khoản đăng ký</span>
+              </span>
+            </label>
+            {suErr.terms && <p className="text-[#ff6b6b] text-[11px] pl-6 -mt-2">{suErr.terms}</p>}
+
             <CTA type="submit" disabled={loading}>
               {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Đăng Ký Ngay
+              Đăng ký ngay
             </CTA>
           </form>
         )}
       </div>
 
-      <div className="flex items-center gap-3 mt-5 mb-3">
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-white/40 text-[11px]">hoặc tiếp tục với</span>
-        <div className="flex-1 h-px bg-white/10" />
+      {/* Language selector */}
+      <div className="mt-auto pt-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5">
+          {LANGS.map((l) => (
+            <button key={l} onClick={() => setLang(l)} className={`text-[12px] transition-colors ${lang === l ? "text-[#ff4d4f] font-medium" : "text-white/45 hover:text-white/70"}`}>{l}</button>
+          ))}
+        </div>
       </div>
-      <SocialButtons onGoogle={onGoogle} onSoon={onSoon} />
-      <p className="text-center text-white/35 text-[11px] mt-5">
-        Bằng việc tiếp tục, bạn đồng ý với Điều khoản & Chính sách bảo mật.
-      </p>
+
+      <SupportButton onClick={() => setSupportOpen(true)} />
+      <SupportChat open={supportOpen} onOpenChange={setSupportOpen} />
     </Shell>
   );
 }
 
 function CTA({ children, ...props }) {
   return (
-    <button
-      {...props}
-      className="w-full h-12 rounded-xl bg-gradient-to-r from-[#FFD700] to-[#FF8A00] text-[#1a1300] font-bold text-[15px] shadow-[0_8px_24px_rgba(255,165,0,0.35)] active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center"
-    >
+    <button {...props} className="w-full h-12 rounded-xl bg-[#ff4d4f] text-white font-bold text-[15px] shadow-[0_8px_24px_rgba(255,77,79,0.35)] active:scale-[0.98] transition-transform disabled:opacity-60 flex items-center justify-center">
       {children}
     </button>
   );
 }
 
-function Shell({ children }) {
+function SupportButton({ onClick }) {
   return (
-    <main className="max-w-[480px] w-full mx-auto h-[100dvh] relative overflow-hidden bg-[#0A0E1A] flex flex-col font-sans">
-      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_18%_12%,rgba(124,199,255,0.14),transparent_42%),radial-gradient(circle_at_82%_18%,rgba(255,215,0,0.10),transparent_45%),radial-gradient(circle_at_50%_92%,rgba(124,255,203,0.10),transparent_48%)]" />
-      <div className="relative z-10 flex-1 flex flex-col px-5 py-6 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+    <button onClick={onClick} aria-label="Hỗ trợ" className="fixed right-4 bottom-5 z-30 w-12 h-12 rounded-full bg-gradient-to-br from-[#ff8a3c] to-[#ff4d4f] flex items-center justify-center shadow-[0_8px_24px_rgba(255,77,79,0.45)] active:scale-95 transition-transform">
+      <Headphones className="w-6 h-6 text-white" />
+    </button>
+  );
+}
+
+function Shell({ children }) {
+  const buildings = useMemo(() => Array.from({ length: 14 }, (_, i) => 30 + ((i * 37) % 70)), []);
+  return (
+    <main className="max-w-[480px] w-full mx-auto h-[100dvh] relative overflow-hidden bg-[#0b0e1e] flex flex-col font-sans">
+      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_18%_12%,rgba(112,51,255,0.18),transparent_42%),radial-gradient(circle_at_82%_16%,rgba(75,0,255,0.16),transparent_45%),radial-gradient(circle_at_50%_88%,rgba(255,77,79,0.10),transparent_50%)]" />
+
+      {/* Skyline panel */}
+      <div className="absolute bottom-0 inset-x-0 h-44 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e1e] via-[#0b0e1e]/70 to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 flex items-end justify-center gap-1 opacity-50 px-2">
+          {buildings.map((h, i) => (
+            <div key={i} className="flex-1 max-w-[26px] bg-[#1a2040] rounded-t-sm" style={{ height: h }} />
+          ))}
+        </div>
+        {/* fireworks */}
+        <span className="absolute top-6 left-1/4 w-1.5 h-1.5 rounded-full bg-[#ff4d4f] blur-[2px]" />
+        <span className="absolute top-10 left-1/2 w-1.5 h-1.5 rounded-full bg-[#ffb74d] blur-[2px]" />
+        <span className="absolute top-8 right-1/4 w-1.5 h-1.5 rounded-full bg-[#fff] blur-[2px]" />
+      </div>
+
+      <div className="relative z-10 flex-1 flex flex-col px-5 py-5 overflow-y-auto [&::-webkit-scrollbar]:hidden">
         {children}
       </div>
     </main>
@@ -296,12 +333,11 @@ function Shell({ children }) {
 
 function Brand() {
   return (
-    <div className="flex flex-col items-center text-center">
-      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#FFD700] to-[#FF8A00] flex items-center justify-center shadow-[0_8px_24px_rgba(255,165,0,0.4)]">
-        <Gem className="w-7 h-7 text-[#1a1300]" />
+    <div className="flex flex-col items-center text-center mt-4">
+      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#ff8a3c] to-[#ff4d4f] flex items-center justify-center shadow-[0_8px_24px_rgba(255,77,79,0.4)]">
+        <Gem className="w-6 h-6 text-white" />
       </div>
-      <h1 className="text-white font-bold text-xl mt-3 tracking-wide">STARGAME</h1>
-      <p className="text-white/50 text-[12px] mt-1">Trải nghiệm cá cược đỉnh cao</p>
+      <h1 className="text-white font-bold text-xl mt-2.5 tracking-wide">Sands</h1>
     </div>
   );
 }
