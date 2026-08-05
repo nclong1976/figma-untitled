@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 import {
@@ -146,10 +145,6 @@ export default function AuthCard({ mode = "login" }) {
   const [agree, setAgree] = useState(false);
   const [suErr, setSuErr] = useState({});
 
-  // OTP step
-  const [showOtp, setShowOtp] = useState(false);
-  const [otpCode, setOtpCode] = useState("");
-
   const returnTo = safeReturnTo();
 
   // ---- handleLogin (Role-Based Routing) ----
@@ -194,34 +189,20 @@ export default function AuthCard({ mode = "login" }) {
     setLoading(true);
     try {
       await base44.auth.register({ email: suEmail, password: suPw });
-      setShowOtp(true);
-      toast({ title: "Mã xác nhận đã gửi", description: `Kiểm tra email ${suEmail}` });
+      // Bỏ xác minh OTP: đăng nhập luôn sau khi đăng ký và chuyển hướng theo role
+      try {
+        await base44.auth.loginViaEmailPassword(suEmail, suPw);
+        let role = "user";
+        try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
+        window.location.href = role === "admin" ? "/admin" : returnTo;
+      } catch {
+        toast({ title: "Đăng ký thành công", description: "Vui lòng đăng nhập để tiếp tục." });
+        navigate("/login");
+      }
     } catch (err) {
       toast({ title: "Đăng ký thất bại", description: err.message || "Không thể tạo tài khoản", variant: "destructive" });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const verifyOtp = async () => {
-    setLoading(true);
-    try {
-      const result = await base44.auth.verifyOtp({ email: suEmail, otpCode });
-      if (result?.access_token) base44.auth.setToken(result.access_token);
-      window.location.href = returnTo;
-    } catch (err) {
-      toast({ title: "Xác minh thất bại", description: err.message || "Mã không hợp lệ", variant: "destructive" });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resendOtp = async () => {
-    try {
-      await base44.auth.resendOtp(suEmail);
-      toast({ title: "Đã gửi lại mã", description: "Kiểm tra email của bạn" });
-    } catch (err) {
-      toast({ title: "Không gửi được mã", description: err.message, variant: "destructive" });
     }
   };
 
@@ -232,37 +213,6 @@ export default function AuthCard({ mode = "login" }) {
   );
 
   const onSupport = () => toast({ title: "Hỗ trợ 24/7", description: "Vui lòng đăng nhập để chat với CSKH." });
-
-  // ---- OTP step ----
-  if (showOtp) {
-    return (
-      <>
-        <Shell>
-          <Brand />
-          <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md p-5 mt-6">
-            <h2 className="text-white font-bold text-lg">Xác minh email</h2>
-            <p className="text-white/55 text-[13px] mt-1">Mã đã gửi tới <span className="text-[#FFD700]">{suEmail}</span></p>
-            <div className="flex justify-center my-5">
-              <InputOTP maxLength={6} value={otpCode} onChange={setOtpCode} autoFocus autoComplete="one-time-code">
-                <InputOTPGroup>
-                  {[0, 1, 2, 3, 4, 5].map((i) => <InputOTPSlot key={i} index={i} className="border-white/20 bg-white/5 text-white" />)}
-                </InputOTPGroup>
-              </InputOTP>
-            </div>
-            <CTA onClick={verifyOtp} disabled={loading || otpCode.length < 6}>
-              {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Xác nhận
-            </CTA>
-            <p className="text-center text-white/55 text-[12px] mt-4">
-              Không nhận được mã?{" "}
-              <button onClick={resendOtp} className="text-[#FFD700] font-medium hover:underline">Gửi lại</button>
-            </p>
-          </div>
-        </Shell>
-        <SupportFab onClick={onSupport} />
-      </>
-    );
-  }
 
   if (mode === "register") {
     return (
