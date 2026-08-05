@@ -114,17 +114,20 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = (shouldRedirect = true) => {
+  // Hàm đăng xuất dùng chung trên toàn ứng dụng:
+  // xoá state, LocalStorage, SessionStorage rồi chuyển về /login
+  const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    
-    if (shouldRedirect) {
-      // Use the SDK's logout method which handles token cleanup and redirect
-      base44.auth.logout(window.location.href);
-    } else {
-      // Just remove the token without redirect
-      base44.auth.logout();
+    setAuthChecked(false);
+    setAuthError(null);
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+    } catch (e) {
+      // ignore
     }
+    base44.auth.logout('/login');
   };
 
   const navigateToLogin = () => {

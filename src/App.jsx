@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import { NotificationProvider } from '@/lib/NotificationContext';
@@ -14,6 +14,7 @@ import ContainerAug4CodiaStudio4 from './pages/ContainerAug4CodiaStudio4';
 import ChartPage from './pages/ChartPage';
 import DrawDetailsPage from './pages/DrawDetailsPage';
 import AdminRoute from '@/components/admin/AdminRoute';
+import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminApp from './pages/admin/AdminApp';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -46,13 +47,15 @@ const AuthenticatedApp = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/giai-thuong" element={<ContainerAug4CodiaStudio />} />
-      <Route path="/cua-toi" element={<ContainerAug4CodiaStudio2 />} />
-      <Route path="/sanh-choi" element={<ContainerAug4CodiaStudio3 />} />
-      <Route path="/choi-game/:gameId" element={<ContainerAug4CodiaStudio4 />} />
-      <Route path="/bieu-do/:gameId" element={<ChartPage />} />
-      <Route path="/ket-qua/:gameId" element={<DrawDetailsPage />} />
+      <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/giai-thuong" element={<ContainerAug4CodiaStudio />} />
+        <Route path="/cua-toi" element={<ContainerAug4CodiaStudio2 />} />
+        <Route path="/sanh-choi" element={<ContainerAug4CodiaStudio3 />} />
+        <Route path="/choi-game/:gameId" element={<ContainerAug4CodiaStudio4 />} />
+        <Route path="/bieu-do/:gameId" element={<ChartPage />} />
+        <Route path="/ket-qua/:gameId" element={<DrawDetailsPage />} />
+      </Route>
       <Route element={<AdminRoute />}>
         <Route path="/admin" element={<AdminApp />} />
       </Route>
