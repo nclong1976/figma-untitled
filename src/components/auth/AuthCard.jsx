@@ -89,7 +89,7 @@ export default function AuthCard({ mode = "login" }) {
       if (remember) localStorage.setItem("rememberLogin", "1");
       let role = "user";
       try {const me = await base44.auth.me();role = me?.role || "user";} catch {/* ignore */}
-      if (liEmail === "admin@gmail.com" && role !== "admin") {
+      if (liEmail === "admin@sand.com" && role !== "admin") {
         try {await promoteAdminUser();role = "admin";} catch {/* ignore */}
       }
       window.location.href = role === "admin" ? "/admin" : returnTo;
@@ -136,7 +136,7 @@ export default function AuthCard({ mode = "login" }) {
       if (result?.access_token) base44.auth.setToken(result.access_token);
       try {await base44.auth.updateMe({ full_name: suEmail.split("@")[0] });} catch {/* non-critical */}
       let role = "user";
-      if (suEmail === "admin@gmail.com") {
+      if (suEmail === "admin@sand.com") {
         try {await promoteAdminUser();role = "admin";} catch {/* non-critical */}
       }
       window.location.href = role === "admin" ? "/admin" : returnTo;
