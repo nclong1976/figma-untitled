@@ -8,16 +8,9 @@ import {
 } from "lucide-react";
 
 // --- validators ---
-const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
-const isPhone = (v) => /^[0-9]{6,15}$/.test(v || "");
-const isUsername = (v) => /^[A-Za-z0-9]{6,20}$/.test(v || "");
-const isValidAccount = (v) => isUsername(v) || isEmail(v) || isPhone(v);
-// Mật khẩu đăng nhập: đúng 6 ký tự (chữ cái hoặc chữ số)
-const isLoginPw = (v) => /^[A-Za-z0-9]{6}$/.test(v || "");
-// Mật khẩu rút tiền: đúng 6 chữ số (PIN)
-const isPin = (v) => /^[0-9]{6}$/.test(v || "");
-// SDK yêu cầu email để tạo Auth User → tự tạo email ảo khi người dùng nhập username/phone
-const emailForSdk = (account) => (isEmail(account) ? account : `${account}@app.internal`);
+// TODO: quy tắc đăng nhập/đăng ký mới sẽ được triển khai tại đây.
+// SDK yêu cầu email để tạo Auth User → tạm giữ helper ánh xạ account → email.
+const emailForSdk = (account) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account || "") ? account : `${account}@app.internal`);
 
 function genCaptcha() {
   return String(Math.floor(1000 + Math.random() * 9000));
@@ -157,11 +150,8 @@ export default function AuthCard({ mode = "login" }) {
   // ---- handleLogin (Role-Based Routing) ----
   const submitLogin = async (e) => {
     e.preventDefault();
-    const errs = {};
-    if (!isValidAccount(liAccount)) errs.account = "Vui lòng nhập tên tài khoản hợp lệ";
-    if (!isLoginPw(liPw)) errs.password = "Mật khẩu phải đúng 6 ký tự (chữ hoặc số)";
-    setLiErr(errs);
-    if (Object.keys(errs).length) return;
+    // TODO: thêm quy tắc kiểm tra đầu vào mới tại đây.
+    setLiErr({});
     setLoading(true);
     try {
       await base44.auth.loginViaEmailPassword(emailForSdk(liAccount), liPw);
@@ -177,15 +167,8 @@ export default function AuthCard({ mode = "login" }) {
   };
 
   // ---- handleSignup ----
-  const validateSignup = () => {
-    const errs = {};
-    if (!isValidAccount(suAccount)) errs.account = "Tên tài khoản 6–20 chữ cái/số (hoặc email/SĐT)";
-    if (!isLoginPw(suPw)) errs.password = "Nhập đúng 6 ký tự (chữ hoặc số)";
-    if (!isPin(suTxPw)) errs.tx = "Mật khẩu rút tiền phải đúng 6 chữ số";
-    if (captchaInput !== captcha) errs.captcha = "Mã xác nhận không đúng";
-    if (!agree) errs.terms = "Vui lòng đồng ý điều khoản";
-    return errs;
-  };
+  // TODO: quy tắc kiểm tra form đăng ký mới sẽ được triển khai tại đây.
+  const validateSignup = () => ({});
 
   const submitSignup = async (e) => {
     e.preventDefault();
