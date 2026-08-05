@@ -20,8 +20,6 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import ContainerAug5CodiaStudio from './pages/ContainerAug5CodiaStudio';
-import ContainerAug5CodiaStudio2 from './pages/ContainerAug5CodiaStudio2';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -65,8 +63,6 @@ const AuthenticatedApp = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/ContainerAug5CodiaStudio" element={<ContainerAug5CodiaStudio />} />
-      <Route path="/ContainerAug5CodiaStudio2" element={<ContainerAug5CodiaStudio2 />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
