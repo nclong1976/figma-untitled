@@ -7,6 +7,16 @@
         "admin",
         "user"
       ]
+    },
+    "balance": {
+      "type": "number",
+      "default": 0,
+      "description": "Wallet balance managed by admin"
+    },
+    "locked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the account is locked by admin"
     }
   },
   "required": [

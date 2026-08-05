@@ -14,8 +14,7 @@ import ContainerAug4CodiaStudio4 from './pages/ContainerAug4CodiaStudio4';
 import ChartPage from './pages/ChartPage';
 import DrawDetailsPage from './pages/DrawDetailsPage';
 import AdminRoute from '@/components/admin/AdminRoute';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminUserDetail from './pages/admin/AdminUserDetail';
+import AdminApp from './pages/admin/AdminApp';
 import ContainerAug5CodiaStudio from './pages/ContainerAug5CodiaStudio';
 import ContainerAug5CodiaStudio2 from './pages/ContainerAug5CodiaStudio2';
 // Add page imports here
@@ -50,8 +49,7 @@ const AuthenticatedApp = () => {
       <Route path="/bieu-do/:gameId" element={<ChartPage />} />
       <Route path="/ket-qua/:gameId" element={<DrawDetailsPage />} />
       <Route element={<AdminRoute />}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/users/:id" element={<AdminUserDetail />} />
+        <Route path="/admin" element={<AdminApp />} />
       </Route>
       <Route path="/ContainerAug5CodiaStudio" element={<ContainerAug5CodiaStudio />} />
       <Route path="/ContainerAug5CodiaStudio2" element={<ContainerAug5CodiaStudio2 />} />
