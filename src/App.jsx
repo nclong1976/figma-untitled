@@ -18,8 +18,6 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminApp from './pages/admin/AdminApp';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -37,7 +35,7 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password', '/oauth-consent'];
+      const AUTH_ROUTES = ['/login', '/register', '/oauth-consent'];
       if (!AUTH_ROUTES.includes(window.location.pathname)) {
         navigateToLogin();
         return null;
@@ -61,8 +59,6 @@ const AuthenticatedApp = () => {
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

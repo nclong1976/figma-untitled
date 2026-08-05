@@ -1,8 +1,8 @@
 import React from "react";
-import { Headphones, Menu as MenuIcon } from "lucide-react";
+import { Headphones } from "lucide-react";
 import NotificationBell from "@/components/NotificationBell";
 
-export default function HomeHeader({ onChat, onMenu, onRefresh }) {
+export default function HomeHeader({ onChat, onRefresh }) {
   return (
     <header className="relative w-full min-h-[37px] flex flex-col items-center justify-center shrink-0">
       <img
@@ -18,9 +18,6 @@ export default function HomeHeader({ onChat, onMenu, onRefresh }) {
         <NotificationBell iconColor="text-[#7f7161]" />
         <button onClick={onChat} aria-label="Hỗ trợ" className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#7f7161] transition-colors">
           <Headphones className="w-4 h-4" />
-        </button>
-        <button onClick={onMenu} aria-label="Menu" className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#7f7161] transition-colors">
-          <MenuIcon className="w-4 h-4" />
         </button>
       </div>
     </header>

@@ -11,7 +11,6 @@ import CategoryTabs from "@/components/home/CategoryTabs";
 import GameSearchBar from "@/components/home/GameSearchBar";
 import GameGrid from "@/components/home/GameGrid";
 import LanguageSwitcher from "@/components/home/LanguageSwitcher";
-import MenuDrawer from "@/components/home/MenuDrawer";
 import FloatingChatButton from "@/components/home/FloatingChatButton";
 import SupportChat from "@/components/profile/SupportChat";
 import WithdrawModal from "@/components/profile/WithdrawModal";
@@ -33,7 +32,6 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
 
   // Withdraw / link state (shared with profile modals)
   const [balance, setBalance] = useState(1000);
@@ -138,7 +136,7 @@ export default function Home() {
 
       {/* Content Flow */}
       <div className="relative z-10 flex flex-col flex-1 pb-24">
-        <HomeHeader onChat={openChat} onMenu={() => setMenuOpen(true)} onRefresh={handleRefresh} />
+        <HomeHeader onChat={openChat} onRefresh={handleRefresh} />
 
         {/* Hero Image */}
         <div className="w-full min-h-[151px] shrink-0">
@@ -177,7 +175,6 @@ export default function Home() {
       <FloatingChatButton onClick={openChat} unread={3} />
       <BottomNav />
 
-      <MenuDrawer open={menuOpen} onOpenChange={setMenuOpen} t={t} />
       <SupportChat open={chatOpen} onOpenChange={setChatOpen} />
       <WithdrawModal
         open={openWithdraw}
