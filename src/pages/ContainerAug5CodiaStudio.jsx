@@ -8,8 +8,8 @@ export default function ContainerAug5CodiaStudio() {
         <img
           src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/4dd80120b_4b3ce3200_e7964c8e120626ed10fcc400a30d3bca65fddbd8.png"
           className="w-full h-full object-cover object-center"
-          alt=""
-        />
+          alt="" />
+        
       </div>
 
       {/* Header */}
@@ -17,14 +17,14 @@ export default function ContainerAug5CodiaStudio() {
         <img
           src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/c8398988f_476d19250_89c06e399be2b327fba9d232c9325ab941eaf9a2.png"
           className="absolute inset-0 w-full h-full object-cover object-center"
-          alt=""
-        />
+          alt="" />
+        
         <button className="absolute left-[17px] w-[13px] h-[23px] flex items-center justify-center">
           <img
             src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/a369ab5a3_dce4b8d7e_827248fb5b533feaf5912946198e5f84b9136df9.png"
             className="w-full h-full object-cover object-center"
-            alt="Back"
-          />
+            alt="Back" />
+          
         </button>
         <h1 className="text-figma-20 font-normal font-paragraph leading-figma-26 text-figma-text-10-6 relative z-10">
           Đăng ký miễn phí
@@ -47,14 +47,14 @@ export default function ContainerAug5CodiaStudio() {
             <img
               src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/615d43741_8da15f2a9_164477a7c08cbfec61798d2849f83c251c9f0096.png"
               className="absolute -bottom-[29px] left-[4px] w-[85px] h-0.5 object-cover"
-              alt=""
-            />
+              alt="" />
+            
           </div>
 
           {/* Inactive Tab */}
           <div className="flex flex-col ml-[9px] relative z-10">
-            <span className="text-figma-21 font-normal font-paragraph leading-figma-23 text-[#cbced4]">
-              Dng nhp tài
+            <span className="text-figma-21 font-normal font-paragraph leading-figma-23 text-[#cbced4]">Đăng Nhập 
+
             </span>
             <span className="text-figma-18 font-normal font-paragraph leading-figma-20 text-[#c8ccd1] mt-[4px]">
               khoan
@@ -62,8 +62,8 @@ export default function ContainerAug5CodiaStudio() {
             <img
               src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/74f5ffc7c_b8c194e8a_81b76887f0b3a6cdc8ef9d82cc7d45ecb3637feb.png"
               className="absolute -bottom-[28px] -left-[11px] w-[128px] h-1 object-cover"
-              alt=""
-            />
+              alt="" />
+            
           </div>
         </div>
 
@@ -173,6 +173,6 @@ export default function ContainerAug5CodiaStudio() {
         </button>
 
       </div>
-    </main>
-  );
+    </main>);
+
 }
