@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { getGameConfig, CHIPS, computeDrawLabels } from "./gameConfig";
+import { getGameConfig, GAME_CONFIGS, CHIPS, computeDrawLabels } from "./gameConfig";
 import { getTier } from "@/components/lobby/lobbyData";
 import Ball from "./Ball";
 import { ChevronLeft, History, Search, User, Lock, ChevronDown } from "lucide-react";
@@ -12,6 +12,7 @@ const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Mat
 
 export default function GamePlayScreen({ gameId, tier, variantId }) {
   const config = useMemo(() => getGameConfig(gameId), [gameId]);
+  const knownGame = !!GAME_CONFIGS[gameId];
   const variant = useMemo(() => (variantId ? getGameById(variantId) : undefined), [variantId]);
   const displayTitle = variant?.title || config.name;
   const thumb = variant?.bg;
@@ -116,6 +117,12 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
           <button className="hover:opacity-80"><User className="w-5 h-5 text-white/85" /></button>
         </div>
       </header>
+
+      {!knownGame && (
+        <div className="relative z-20 shrink-0 px-3 py-1.5 bg-amber-500/15 border-b border-amber-400/30">
+          <p className="text-amber-200 text-[11px] text-center">Game không khả dụng — hiển thị bàn cược mặc định</p>
+        </div>
+      )}
 
       {/* Live status bar */}
       <section className="relative z-10 shrink-0 px-3 py-1.5 bg-[#0d1226] border-b border-white/10">
