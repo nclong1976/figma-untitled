@@ -22,7 +22,7 @@ export default function GameCard({ game, onClick, t }) {
   return (
     <motion.button
       onClick={handleTap}
-      whileHover={{ scale: 1.03 }}
+      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: isMaintenance ? 1 : 0.97 }}
       className="relative w-full aspect-[130/162] rounded-xl overflow-clip flex flex-col justify-end pb-3 items-center cursor-pointer group">
       

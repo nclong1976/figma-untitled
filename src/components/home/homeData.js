@@ -39,18 +39,7 @@ export const GAMES = [
   { id: "g9", gameId: "pk10", title: "Việt Nam PK10", category: "pk10", status: "active",
     bg: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/38febe088_1eabcfca9_d156668801802b58119f12682f7a120ece51a035.png",
     titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-16 text-[#d6c3ec]" },
-  { id: "g10", gameId: "slot", title: "Vàng Pharaoh", category: "slot", badge: "hot", status: "active",
-    bg: "https://images.unsplash.com/photo-1606189934846-a527add8a77b?w=400&q=80",
-    titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-16 text-[#f5e68e]" },
-  { id: "g11", gameId: "slot", title: "Thần Tài Vàng", category: "slot", badge: "new", status: "active",
-    bg: "https://images.unsplash.com/photo-1614032686099-e648d6dea9b3?w=400&q=80",
-    titleClass: "text-figma-12 font-bold font-figma-inter leading-figma-16 text-[#f3dabb]" },
-  { id: "g12", gameId: "casino", title: "Baccarat VIP", category: "casino", badge: "hot", status: "active",
-    bg: "https://images.unsplash.com/photo-1546706887-a24b3d641b53?w=400&q=80",
-    titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-16 text-[#d1bde4]" },
-  { id: "g13", gameId: "casino", title: "Rồng Hổ", category: "casino", status: "active",
-    bg: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=400&q=80",
-    titleClass: "text-figma-12 font-bold font-figma-arimo leading-figma-16 text-[#ccb2eb]" },
+
 ];
 
 export const ANNOUNCEMENTS = [

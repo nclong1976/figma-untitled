@@ -13,8 +13,12 @@ import LanguageSwitcher from "@/components/home/LanguageSwitcher";
 import MenuDrawer from "@/components/home/MenuDrawer";
 import FloatingChatButton from "@/components/home/FloatingChatButton";
 import SupportChat from "@/components/profile/SupportChat";
+import WithdrawModal from "@/components/profile/WithdrawModal";
+import LinkAccountModal from "@/components/profile/LinkAccountModal";
+import BetHistoryModal from "@/components/profile/BetHistoryModal";
 import { GAMES, CATEGORIES, ANNOUNCEMENTS } from "@/components/home/homeData";
 import { makeT } from "@/components/home/i18n";
+import { seedLinked, seedBets, MIN_TURNOVER } from "@/components/profile/profileData";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -24,8 +28,18 @@ export default function Home() {
   const [category, setCategory] = useState("all");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [chatOpen, setChatOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Withdraw / link state (shared with profile modals)
+  const [balance, setBalance] = useState(1000);
+  const [linked, setLinked] = useState(seedLinked);
+  const [bets] = useState(seedBets);
+  const [turnover] = useState(1500);
+  const [openWithdraw, setOpenWithdraw] = useState(false);
+  const [openLink, setOpenLink] = useState(false);
+  const [openBet, setOpenBet] = useState(false);
 
   const t = useMemo(() => makeT(lang), [lang]);
 
@@ -40,13 +54,51 @@ export default function Home() {
     setLoading(true);
     const id = setTimeout(() => setLoading(false), category === "all" && !search ? 700 : 350);
     return () => clearTimeout(id);
-  }, [category, search]);
+  }, [category, search, refreshKey]);
 
   const openChat = useCallback(() => setChatOpen(true), []);
 
+  const handleRefresh = () => {
+    setRefreshKey((k) => k + 1);
+    setCategory("all");
+    setSearch("");
+  };
+
+  const handleWithdraw = async () => {
+    let authed;
+    try {
+      authed = await base44.auth.isAuthenticated();
+    } catch {
+      authed = false;
+    }
+    if (!authed) {
+      toast({ title: t("need_login") });
+      base44.auth.redirectToLogin(window.location.pathname);
+      return;
+    }
+    const hasBank = linked.some((a) => a.type === "bank");
+    if (!hasBank) {
+      toast({ title: t("link_bank_first") });
+      setOpenLink(true);
+      return;
+    }
+    setOpenWithdraw(true);
+  };
+
+  const submitWithdraw = ({ amount, bank }) => {
+    setBalance((b) => +(b - amount).toFixed(2));
+    toast({ title: "Gửi yêu cầu rút tiền thành công", description: `${amount} coin · ${bank?.bankName}` });
+    setOpenWithdraw(false);
+  };
+
+  const addLinked = (acct) => {
+    setLinked((l) => [acct, ...l]);
+    toast({ title: "Liên kết tài khoản thành công" });
+  };
+
   const handleGameClick = async (game) => {
     if (game.status === "maintenance") {
-      toast({ title: t("maintenance"), description: game.title, variant: "destructive" });
+      toast({ title: t("maintenance_toast"), variant: "destructive" });
       return;
     }
     try {
@@ -77,7 +129,7 @@ export default function Home() {
 
       {/* Content Flow */}
       <div className="relative z-10 flex flex-col flex-1 pb-24">
-        <HomeHeader onChat={openChat} onMenu={() => setMenuOpen(true)} />
+        <HomeHeader onChat={openChat} onMenu={() => setMenuOpen(true)} onRefresh={handleRefresh} />
 
         {/* Hero Image */}
         <div className="w-full min-h-[151px] shrink-0">
@@ -90,7 +142,13 @@ export default function Home() {
 
         <AnnouncementBar announcements={ANNOUNCEMENTS} />
 
-        <ActionButtons t={t} />
+        <ActionButtons
+          t={t}
+          onDeposit={openChat}
+          onWithdraw={handleWithdraw}
+          onHistory={() => setOpenBet(true)}
+          onSupport={openChat}
+        />
 
         {/* Game Lobby Section */}
         <div className="mt-[18px] flex flex-col shrink-0">
@@ -112,6 +170,17 @@ export default function Home() {
 
       <MenuDrawer open={menuOpen} onOpenChange={setMenuOpen} t={t} />
       <SupportChat open={chatOpen} onOpenChange={setChatOpen} />
+      <WithdrawModal
+        open={openWithdraw}
+        onOpenChange={setOpenWithdraw}
+        balance={balance}
+        minTurnover={MIN_TURNOVER}
+        turnover={turnover}
+        linked={linked}
+        onSubmit={submitWithdraw}
+      />
+      <LinkAccountModal open={openLink} onOpenChange={setOpenLink} onAdd={addLinked} linked={linked} />
+      <BetHistoryModal open={openBet} onOpenChange={setOpenBet} bets={bets} />
     </main>
   );
 }

@@ -24,6 +24,7 @@ const dict = {
     cat_slot: "Slot",
     cat_casino: "Casino",
     maintenance: "Game đang bảo trì",
+    maintenance_toast: "Game đang trong thời gian bảo trì, vui lòng quay lại sau",
     badge_hot: "Hot",
     badge_new: "Mới",
     maintenance_badge: "Bảo trì",
@@ -32,6 +33,7 @@ const dict = {
     awards: "Giải thưởng",
     profile: "Của tôi",
     need_login: "Vui lòng đăng nhập để chơi",
+    link_bank_first: "Vui lòng liên kết ngân hàng trước khi rút",
   },
   zh: {
     deposit: "立即充值",
@@ -47,6 +49,7 @@ const dict = {
     cat_slot: "老虎机",
     cat_casino: "赌场",
     maintenance: "游戏维护中",
+    maintenance_toast: "游戏正在维护中，请稍后再来",
     badge_hot: "热门",
     badge_new: "新",
     maintenance_badge: "维护",
@@ -55,6 +58,7 @@ const dict = {
     awards: "奖励",
     profile: "我的",
     need_login: "请登录后游戏",
+    link_bank_first: "提现前请先绑定银行",
   },
   en: {
     deposit: "Deposit now",
@@ -70,6 +74,7 @@ const dict = {
     cat_slot: "Slot",
     cat_casino: "Casino",
     maintenance: "Game under maintenance",
+    maintenance_toast: "Game is under maintenance, please come back later",
     badge_hot: "Hot",
     badge_new: "New",
     maintenance_badge: "Maintenance",
@@ -78,6 +83,7 @@ const dict = {
     awards: "Rewards",
     profile: "Profile",
     need_login: "Please log in to play",
+    link_bank_first: "Please link a bank account before withdrawing",
   },
 };
 
