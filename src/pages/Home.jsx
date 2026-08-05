@@ -149,7 +149,7 @@ export default function Home() {
           <img
             src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/e57f331cd_708f7e507_e87283081c2ffaf4802a737a4f6e0a1d686d3b3c.png"
             alt="Casino Floor"
-            className="w-full h-full object-cover rounded-none" />
+            className="w-full h-full object-cover rounded-md" />
           
         </div>
 
