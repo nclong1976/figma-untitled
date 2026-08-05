@@ -28,7 +28,7 @@ export default function GameCard({ game, onClick, t }) {
       
       <img src={game.bg} alt={game.title} className="absolute inset-0 w-full h-full object-cover z-0" />
       {game.overlay && <img src={game.overlay.src} alt="" className={game.overlay.cls} />}
-      <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors z-10 hidden" />
+      
 
       {game.badge && !isMaintenance &&
       <span className={`absolute top-1 right-1 z-20 text-[9px] font-bold px-1.5 py-0.5 rounded-full ${game.badge === "hot" ? "bg-red-500 text-white" : "bg-emerald-500 text-white"}`}>
