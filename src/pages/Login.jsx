@@ -6,11 +6,13 @@ import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 // Ánh xạ tài khoản đăng nhập → email SDK.
-// Tài khoản "admin" đặc biệt → admin@sand.com; các tài khoản khác tự sinh email ảo.
+// Bỏ qua kiểm tra định dạng Gmail / OTP: tài khoản admin (admin, admin1) → email admin thật,
+// các tài khoản khác tự sinh email ảo (không yêu cầu OTP).
 const emailForSdk = (account) => {
   const v = (account || "").trim();
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return v;
-  if (v.toLowerCase() === "admin") return "admin@sand.com";
+  const lower = v.toLowerCase();
+  if (lower === "admin" || lower === "admin1") return "admin1@sand.com";
   return `${v}@app.internal`;
 };
 
