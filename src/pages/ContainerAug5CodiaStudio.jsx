@@ -38,10 +38,10 @@ export default function ContainerAug5CodiaStudio() {
         <div className="relative w-full mt-[clamp(16px,9.3vw,41px)] pl-[clamp(17px,25.2vw,111px)] flex">
           {/* Active Tab */}
           <div className="flex flex-col relative z-10">
-            <span className="text-figma-17 font-normal font-paragraph leading-figma-24 text-figma-text-2-6">
-              Đăng ký tài
+            <span className="text-figma-17 font-normal font-paragraph leading-figma-24 text-figma-text-2-6">Đăng Ký 
+
             </span>
-            <span className="text-figma-18 font-normal font-paragraph leading-figma-20 text-figma-text-2-6 mt-[3px]">
+            <span className="text-figma-18 font-normal font-paragraph leading-figma-20 text-figma-text-2-6 mt-[3px] hidden">
               khoản
             </span>
             <img
