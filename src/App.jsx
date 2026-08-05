@@ -10,6 +10,8 @@ import ContainerAug4CodiaStudio from './pages/ContainerAug4CodiaStudio';
 import ContainerAug4CodiaStudio2 from './pages/ContainerAug4CodiaStudio2';
 import ContainerAug4CodiaStudio3 from './pages/ContainerAug4CodiaStudio3';
 import ContainerAug4CodiaStudio4 from './pages/ContainerAug4CodiaStudio4';
+import ChartPage from './pages/ChartPage';
+import DrawDetailsPage from './pages/DrawDetailsPage';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -39,6 +41,8 @@ const AuthenticatedApp = () => {
       <Route path="/cua-toi" element={<ContainerAug4CodiaStudio2 />} />
       <Route path="/sanh-choi" element={<ContainerAug4CodiaStudio3 />} />
       <Route path="/choi-game/:gameId" element={<ContainerAug4CodiaStudio4 />} />
+      <Route path="/bieu-do/:gameId" element={<ChartPage />} />
+      <Route path="/ket-qua/:gameId" element={<DrawDetailsPage />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
