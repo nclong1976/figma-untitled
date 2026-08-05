@@ -13,6 +13,9 @@ import ContainerAug4CodiaStudio3 from './pages/ContainerAug4CodiaStudio3';
 import ContainerAug4CodiaStudio4 from './pages/ContainerAug4CodiaStudio4';
 import ChartPage from './pages/ChartPage';
 import DrawDetailsPage from './pages/DrawDetailsPage';
+import AdminRoute from '@/components/admin/AdminRoute';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminUserDetail from './pages/admin/AdminUserDetail';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -44,6 +47,10 @@ const AuthenticatedApp = () => {
       <Route path="/choi-game/:gameId" element={<ContainerAug4CodiaStudio4 />} />
       <Route path="/bieu-do/:gameId" element={<ChartPage />} />
       <Route path="/ket-qua/:gameId" element={<DrawDetailsPage />} />
+      <Route element={<AdminRoute />}>
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/users/:id" element={<AdminUserDetail />} />
+      </Route>
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

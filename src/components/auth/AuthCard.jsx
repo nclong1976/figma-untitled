@@ -98,7 +98,9 @@ export default function AuthCard({ mode = "login" }) {
     try {
       await base44.auth.loginViaEmailPassword(liEmail, liPw);
       if (remember) localStorage.setItem("rememberLogin", "1");
-      window.location.href = returnTo;
+      let role = "user";
+      try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
+      window.location.href = role === "admin" ? "/admin" : returnTo;
     } catch (err) {
       toast({ title: "Đăng nhập thất bại", description: err.message || "Email hoặc mật khẩu không đúng", variant: "destructive" });
     } finally {
