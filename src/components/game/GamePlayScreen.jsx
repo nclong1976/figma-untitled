@@ -4,6 +4,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { getGameConfig, GAME_CONFIGS, CHIPS, computeDrawLabels } from "./gameConfig";
 import { getTier } from "@/components/lobby/lobbyData";
 import Ball from "./Ball";
+import NotificationBell from "@/components/NotificationBell";
+import { useNotifications } from "@/lib/NotificationContext";
 import { ChevronLeft, History, Search, User, Lock, ChevronDown } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { getGameById } from "@/components/home/homeData";
@@ -18,6 +20,7 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
   const thumb = variant?.bg;
   const tierLabel = getTier(tier)?.label;
   const { toast } = useToast();
+  const { push } = useNotifications();
   const navigate = useNavigate();
 
   const [activeTabId, setActiveTabId] = useState(config.tabs[0].id);
@@ -44,6 +47,8 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
       setCountdown((c) => {
         if (c <= 0) return config.roundSeconds;
         if (c <= 1) {
+          const res = computeDrawLabels(drawn, config.bigThreshold);
+          push({ type: "result", title: `Kỳ ${period} mở kết quả`, body: `${drawn.join(", ")} · ${res.big}/${res.parity}` });
           setHistory((h) => [{ period, drawn }, ...h].slice(0, 20));
           setDrawn(randomDraw(config.drawCount));
           setPeriod((p) => p + 1);
@@ -94,6 +99,7 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
     setBalance((b) => b - total);
     setTickets([]); setSelectedCells([]); setBetAmount(0);
     toast({ title: "Đã gửi đơn đặt hàng", description: `${toSubmit.length} vé · ${total} coin · kỳ ${period}` });
+    push({ type: "balance", title: "Đặt cược thành công", body: `-${total} coin · kỳ ${period}` });
   };
 
   return (
@@ -112,7 +118,8 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
           )}
           <h1 className="text-white font-bold text-[15px] truncate">{displayTitle}</h1>
         </div>
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
+          <NotificationBell />
           <button className="hover:opacity-80"><Search className="w-5 h-5 text-white/85" /></button>
           <button className="hover:opacity-80"><User className="w-5 h-5 text-white/85" /></button>
         </div>

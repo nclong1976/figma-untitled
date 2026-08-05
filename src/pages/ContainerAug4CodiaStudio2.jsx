@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { useNotifications } from "@/lib/NotificationContext";
+import NotificationBell from "@/components/NotificationBell";
 import BottomNav from "@/components/BottomNav";
 import ProfileCard from "@/components/profile/ProfileCard";
 import QuickMenuCard from "@/components/profile/QuickMenuCard";
@@ -16,6 +18,7 @@ import { seedBets, seedTxs, seedLinked, MIN_TURNOVER } from "@/components/profil
 
 export default function ContainerAug4CodiaStudio2() {
   const { toast } = useToast();
+  const { push } = useNotifications();
   const [user, setUser] = useState(null);
   const [hidden, setHidden] = useState(false);
   const [balance, setBalance] = useState(1000);
@@ -74,6 +77,7 @@ export default function ContainerAug4CodiaStudio2() {
     }, ...t]);
     setBalance((b) => +(b - amount).toFixed(2));
     toast({ title: "Gửi yêu cầu rút tiền thành công", description: `${amount} coin · ${bank?.bankName}` });
+    push({ type: "balance", title: "Rút tiền thành công", body: `-${amount} coin · ${bank?.bankName}` });
     setOpenWithdraw(false);
   };
 
@@ -88,6 +92,7 @@ export default function ContainerAug4CodiaStudio2() {
         />
 
         <div className="relative z-10 flex flex-col w-full pb-24">
+          <div className="absolute top-2 right-2 z-30"><NotificationBell /></div>
           <ProfileCard
             user={user}
             balance={balance}

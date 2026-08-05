@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { useNotifications } from "@/lib/NotificationContext";
 import BottomNav from "@/components/BottomNav";
 import AnnouncementBar from "@/components/home/AnnouncementBar";
 import HomeHeader from "@/components/home/HomeHeader";
@@ -24,6 +25,7 @@ import { resolveInitialTier, getTier } from "@/components/lobby/lobbyData";
 export default function Home() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { push } = useNotifications();
 
   const [lang, setLang] = useState("vi");
   const [category, setCategory] = useState("all");
@@ -89,6 +91,7 @@ export default function Home() {
   const submitWithdraw = ({ amount, bank }) => {
     setBalance((b) => +(b - amount).toFixed(2));
     toast({ title: "Gửi yêu cầu rút tiền thành công", description: `${amount} coin · ${bank?.bankName}` });
+    push({ type: "balance", title: "Rút tiền thành công", body: `-${amount} coin · ${bank?.bankName}` });
     setOpenWithdraw(false);
   };
 

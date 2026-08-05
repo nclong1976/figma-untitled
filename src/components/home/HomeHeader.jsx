@@ -1,5 +1,6 @@
 import React from "react";
 import { Headphones, Menu as MenuIcon } from "lucide-react";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function HomeHeader({ onChat, onMenu, onRefresh }) {
   return (
@@ -14,6 +15,7 @@ export default function HomeHeader({ onChat, onMenu, onRefresh }) {
         <p className="text-figma-17 font-normal font-heading leading-figma-14 text-[#7f7161] mt-0.5">Sands</p>
       </button>
       <div className="absolute top-1 right-2 z-20 flex items-center gap-1">
+        <NotificationBell iconColor="text-[#7f7161]" />
         <button onClick={onChat} aria-label="Hỗ trợ" className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#7f7161] transition-colors">
           <Headphones className="w-4 h-4" />
         </button>
