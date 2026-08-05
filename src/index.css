@@ -110,8 +110,20 @@
     --figma-text-9: 240 4% 37%;
 
     --figma-text-10: 260 3% 38%;
-
-
+    /* figma:untitled (cZCvPbAn) — start */
+    --figma-primary: 0 0% 98%;
+    --figma-secondary: 235 44% 17%;
+    --figma-text-1-2: 236 8% 65%;
+    --figma-text-2-2: 240 8% 65%;
+    --figma-text-3-2: 344 58% 35%;
+    --figma-text-4-2: 47 64% 43%;
+    --figma-text-5-2: 260 1% 43%;
+    --figma-text-6-2: 356 47% 40%;
+    --figma-text-7-2: 48 65% 45%;
+    --figma-text-8-2: 250 3% 43%;
+    --figma-text-9-2: 356 50% 42%;
+    --figma-text-10-2: 49 64% 46%;
+    /* figma:untitled (cZCvPbAn) — end */
   }
 
   .dark {

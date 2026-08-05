@@ -10,6 +10,21 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-primary": "hsl(var(--figma-primary))",
+        "figma-secondary": "hsl(var(--figma-secondary))",
+        "figma-text-1-2": "hsl(var(--figma-text-1-2))",
+        "figma-text-2-2": "hsl(var(--figma-text-2-2))",
+        "figma-text-3-2": "hsl(var(--figma-text-3-2))",
+        "figma-text-4-2": "hsl(var(--figma-text-4-2))",
+        "figma-text-5-2": "hsl(var(--figma-text-5-2))",
+        "figma-text-6-2": "hsl(var(--figma-text-6-2))",
+        "figma-text-7-2": "hsl(var(--figma-text-7-2))",
+        "figma-text-8-2": "hsl(var(--figma-text-8-2))",
+        "figma-text-9-2": "hsl(var(--figma-text-9-2))",
+        "figma-text-10-2": "hsl(var(--figma-text-10-2))",
+        // figma:untitled (cZCvPbAn) — end
+      
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
@@ -109,6 +124,15 @@ module.exports = {
   		
   		
   		fontSize: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-17": "17px",
+        "figma-18": "18px",
+        "figma-19": "19px",
+        "figma-25": "25px",
+        "figma-27": "27px",
+        "figma-30": "30px",
+        // figma:untitled (cZCvPbAn) — end
+      
   			
   			'figma-10': '10px',
   			
@@ -126,6 +150,11 @@ module.exports = {
   		
   		
   		fontWeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
+        "figma-semibold": "600",
+        // figma:untitled (cZCvPbAn) — end
+      
   			
   			'figma-light': '300',
   			
@@ -137,6 +166,20 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-19": "19px",
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-25": "25px",
+        "figma-29": "29px",
+        "figma-30": "30px",
+        "figma-35": "35px",
+        "figma-37": "37px",
+        "figma-38": "38px",
+        "figma-40": "40px",
+        "figma-41": "41px",
+        // figma:untitled (cZCvPbAn) — end
+      
   			
   			'figma-11': '11px',
   			
@@ -160,6 +203,12 @@ module.exports = {
   		
   		
   		fontFamily: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-microsoft-sans-serif": ['"Microsoft Sans Serif"', 'sans-serif'],
+        "figma-times-new-roman": ['"Times New Roman"', 'sans-serif'],
+        "figma-arial-narrow": ['"Arial Narrow"', 'sans-serif'],
+        // figma:untitled (cZCvPbAn) — end
+      
   			
   			'heading': ['"Sofadi One"', 'sans-serif'],
   			

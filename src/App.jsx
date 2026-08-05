@@ -6,6 +6,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Home from './pages/Home';
+import ContainerAug4CodiaStudio from './pages/ContainerAug4CodiaStudio';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -31,6 +32,7 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/ContainerAug4CodiaStudio" element={<ContainerAug4CodiaStudio />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
