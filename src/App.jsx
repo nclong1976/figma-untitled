@@ -35,7 +35,7 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      const AUTH_ROUTES = ['/login', '/register', '/oauth-consent'];
+      const AUTH_ROUTES = ['/login', '/register'];
       if (!AUTH_ROUTES.includes(window.location.pathname)) {
         navigateToLogin();
         return null;

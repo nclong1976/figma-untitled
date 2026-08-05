@@ -36,6 +36,23 @@ export default function Register() {
   const submit = async (e) => {
     e.preventDefault();
     if (loading) return;
+    const u = account.trim();
+    if (!/^[A-Za-z0-9]{6,20}$/.test(u)) {
+      toast({ title: "Lỗi", description: "Tên tài khoản 6–20 chữ cái và số", variant: "destructive" });
+      return;
+    }
+    if (password.length < 6 || password.length > 16) {
+      toast({ title: "Lỗi", description: "Mật khẩu 6–16 ký tự", variant: "destructive" });
+      return;
+    }
+    if (password !== confirm) {
+      toast({ title: "Lỗi", description: "Mật khẩu nhập lại không khớp", variant: "destructive" });
+      return;
+    }
+    if (!/^\d{6}$/.test(payPw)) {
+      toast({ title: "Lỗi", description: "Mật khẩu thanh toán phải đúng 6 số", variant: "destructive" });
+      return;
+    }
     if (captchaInput !== captcha) {
       toast({ title: "Lỗi", description: "Mã xác nhận không đúng", variant: "destructive" });
       return;
