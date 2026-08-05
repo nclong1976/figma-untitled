@@ -9,9 +9,6 @@ import { useNotifications } from "@/lib/NotificationContext";
 import { ChevronLeft, History, Search, User, Lock, ChevronDown } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { getGameById } from "@/components/home/homeData";
-import { base44 } from "@/api/base44Client";
-import { useAuth } from "@/lib/AuthContext";
-import { useWallet } from "@/hooks/useWallet";
 
 const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Math.random() * 10));
 
@@ -34,20 +31,8 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
   const tierChips = useMemo(() => getTier(tier)?.chips || CHIPS, [tier]);
   const [selectedChip, setSelectedChip] = useState(tierChips[0]);
   useEffect(() => { setSelectedChip(tierChips[0]); }, [tierChips]);
-  const { user } = useAuth();
-  const { balance, update: updateBalance } = useWallet();
   const [betAmount, setBetAmount] = useState(0);
-  const [payout, setPayout] = useState(1);
-
-  useEffect(() => {
-    let alive = true;
-    const loadPayout = () => base44.entities.PayoutSetting.filter({ gameId }).then((list) => { if (alive) setPayout(list[0]?.multiplier ?? 1); }).catch(() => {});
-    loadPayout();
-    const unsub = base44.entities.PayoutSetting.subscribe(loadPayout);
-    return () => { alive = false; unsub && unsub(); };
-  }, [gameId]);
-
-  const effOdds = (oddsStr) => { const n = parseFloat(oddsStr); if (isNaN(n)) return oddsStr; const e = n * payout; return Number.isInteger(e) ? String(e) : e.toFixed(2); };
+  const [balance, setBalance] = useState(1000.0);
 
   const [period, setPeriod] = useState(1897430);
   const [countdown, setCountdown] = useState(config.roundSeconds);
@@ -104,21 +89,14 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
 
   const handleReset = () => { setSelectedCells([]); setTickets([]); setBetAmount(0); };
 
-  const handlePlace = async () => {
+  const handlePlace = () => {
     if (bettingClosed) { toast({ title: "Đang chờ kỳ tiếp theo", variant: "destructive" }); return; }
     const toSubmit = tickets.length > 0 ? tickets : selectedCells.map((s) => ({ ...s, amount: betAmount }));
     if (toSubmit.length === 0) { toast({ title: "Vui lòng chọn cách chơi", variant: "destructive" }); return; }
     const total = toSubmit.reduce((a, t) => a + (t.amount || 0), 0);
     if (!total || total <= 0) { toast({ title: "Chưa nhập tiền cược", variant: "destructive" }); return; }
     if (total > balance) { toast({ title: "Số dư không đủ", variant: "destructive" }); return; }
-    try {
-      await base44.entities.Bet.bulkCreate(toSubmit.map((t) => ({
-        userId: user.id, userEmail: user.email,
-        hallId: gameId, hallName: displayTitle, tier: tierLabel || tier || "",
-        amount: t.amount, result: "pending", period: String(period),
-      })));
-    } catch (e) {}
-    updateBalance(+(balance - total).toFixed(2));
+    setBalance((b) => b - total);
     setTickets([]); setSelectedCells([]); setBetAmount(0);
     toast({ title: "Đã gửi đơn đặt hàng", description: `${toSubmit.length} vé · ${total} coin · kỳ ${period}` });
     push({ type: "balance", title: "Đặt cược thành công", body: `-${total} coin · kỳ ${period}` });
@@ -231,7 +209,7 @@ export default function GamePlayScreen({ gameId, tier, variantId }) {
                     className={`flex flex-col items-center justify-center h-[64px] bg-white transition-colors ${sel ? "bg-[#ffe9d6] ring-2 ring-[#ff6600] inset-shadow" : "hover:bg-[#fafafa]"}`}
                   >
                     <p className={`text-[13px] font-semibold leading-tight ${sel ? "text-[#ff6600]" : "text-[#333]"}`}>{item.label}</p>
-                    <p className="text-[11px] text-[#999] mt-0.5">{effOdds(item.odds)}</p>
+                    <p className="text-[11px] text-[#999] mt-0.5">{item.odds}</p>
                   </button>
                 );
               })}

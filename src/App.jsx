@@ -24,7 +24,7 @@ import ResetPassword from './pages/ResetPassword';
 // Add page imports here
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, isAuthenticated, authChecked } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
 
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
@@ -43,14 +43,6 @@ const AuthenticatedApp = () => {
         navigateToLogin();
         return null;
       }
-    }
-  }
-
-  if (authChecked && !isAuthenticated && !authError) {
-    const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password', '/oauth-consent'];
-    if (!AUTH_ROUTES.includes(window.location.pathname)) {
-      navigateToLogin();
-      return null;
     }
   }
 

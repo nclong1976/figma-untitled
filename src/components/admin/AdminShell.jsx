@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { LayoutDashboard, Users, Gamepad2, Ticket, ArrowLeftRight, Bell, Settings, LogOut, Menu, Shield, MessageSquare, Percent } from "lucide-react";
+import { LayoutDashboard, Users, Gamepad2, Ticket, ArrowLeftRight, Bell, Settings, LogOut, Menu, Shield, MessageSquare } from "lucide-react";
 
 const NAV = [
   { id: "overview", label: "Tổng quan", icon: LayoutDashboard },
   { id: "users", label: "Người dùng", icon: Users },
   { id: "halls", label: "Sảnh chơi", icon: Gamepad2 },
-  { id: "payout", label: "Tỷ lệ trả thưởng", icon: Percent },
   { id: "bets", label: "Đặt cược", icon: Ticket },
   { id: "transactions", label: "Giao dịch", icon: ArrowLeftRight },
   { id: "notifications", label: "Thông báo", icon: Bell },
