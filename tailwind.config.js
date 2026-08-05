@@ -208,6 +208,15 @@ module.exports = {
   		
   		fontSize: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-13": "13px",
+        "figma-15": "15px",
+        "figma-17": "17px",
+        "figma-18": "18px",
+        "figma-20": "20px",
+        "figma-21": "21px",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-20": "20px",
         "figma-21": "21px",
         "figma-24": "24px",
@@ -287,6 +296,10 @@ module.exports = {
   		fontWeight: {
         // figma:untitled (cZCvPbAn) — start
         "figma-normal": "400",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
         "figma-medium": "500",
         "figma-bold": "700",
         // figma:untitled (cZCvPbAn) — end
@@ -328,6 +341,15 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-22": "22px",
+        "figma-23": "23px",
+        "figma-24": "24px",
+        "figma-26": "26px",
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-23": "23px",
         "figma-25": "25px",
