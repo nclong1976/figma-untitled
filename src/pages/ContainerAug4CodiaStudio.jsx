@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import BottomNav from "@/components/BottomNav";
 
 export default function ContainerAug4CodiaStudio() {
   const listData = [
@@ -142,7 +143,7 @@ export default function ContainerAug4CodiaStudio() {
       </header>
 
       {/* Scrollable Content Area */}
-      <div className="relative z-10 flex-1 w-full overflow-y-auto overflow-x-clip pb-[clamp(25px,16.2vw,100px)] scrollbar-hide">
+      <div className="relative z-10 flex-1 w-full overflow-y-auto overflow-x-clip pb-28 scrollbar-hide">
         <div className="flex flex-col w-full pt-2">
           {listData.map((item) => (
             <ListItem key={item.id} item={item} />
@@ -191,49 +192,7 @@ export default function ContainerAug4CodiaStudio() {
       </div>
 
       {/* Bottom Navigation */}
-      <nav className="absolute bottom-0 left-0 w-full min-h-[86px] z-50">
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/d7bcbe06c_c73015b44_a5d35d3cf4b3aacd9842e794a79d67bfa39da6cf.png" alt="" className="w-full h-full object-cover object-center" />
-        </div>
-        {/* Top border line */}
-        <div className="absolute top-0 left-0 w-full min-h-[2px] z-10">
-          <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/30e42baea_bb291e141_af23c935534437f9913994c386a677edaf015667.png" alt="" className="w-full h-full object-cover" />
-        </div>
-
-        <div className="relative z-10 w-full h-full flex flex-row justify-between items-end px-[clamp(16px,5.7vw,35px)] pb-[12px]">
-          {/* Nav Item 1 */}
-          <button className="flex flex-col items-center justify-end h-full group focus:outline-none">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/c675c6d5b_8d140aa7a_255998b5db2f0a2029e693fb3ca9ddd68f6d9143.png" alt="" className="w-[35px] h-[31px] object-cover mb-1 group-hover:-translate-y-1 transition-transform" />
-            <p className="text-[19px] font-normal font-figma-inter leading-[21px] text-figma-text-1-2 whitespace-nowrap">
-              Trang chu
-            </p>
-          </button>
-
-          {/* Nav Item 2 (Active) */}
-          <button className="flex flex-col items-center justify-end h-full group focus:outline-none">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/98cf00b6e_057c1c933_3457d84fa24efd4a1fd25ce0a6540c34fba7a156.png" alt="" className="w-[55px] h-[41px] object-cover mb-1 group-hover:-translate-y-1 transition-transform" />
-            <p className="text-[18px] font-normal font-paragraph leading-[20px] text-figma-text-3-2 whitespace-nowrap">
-              Giải Thưởng
-            </p>
-          </button>
-
-          {/* Nav Item 3 */}
-          <button className="flex flex-col items-center justify-end h-full group focus:outline-none">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/a055d87af_51082870c_1032c4dddfa86601c12ea374f143d94bf37dddfc.png" alt="" className="w-[41px] h-[35px] object-cover mb-1 group-hover:-translate-y-1 transition-transform" />
-            <p className="text-[18px] font-normal font-paragraph leading-[19px] text-figma-text-1-2 whitespace-nowrap">
-              Sanh Choi
-            </p>
-          </button>
-
-          {/* Nav Item 4 */}
-          <button className="flex flex-col items-center justify-end h-full group focus:outline-none">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/725b0aa2b_69bf6a3a5_8c46f8c6fec0e76309e5dcc6e7bb0dba269974ee.png" alt="" className="w-[32px] h-[33px] object-cover mb-1 group-hover:-translate-y-1 transition-transform" />
-            <p className="text-[17px] font-normal font-figma-microsoft-sans-serif leading-[19px] text-figma-text-1-2 whitespace-nowrap">
-              Cua Tôi
-            </p>
-          </button>
-        </div>
-      </nav>
+      <BottomNav />
     </main>
   );
 }

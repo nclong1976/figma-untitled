@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import BottomNav from "@/components/BottomNav";
 
 export default function ContainerAug4CodiaStudio2() {
   return (
@@ -13,7 +14,7 @@ export default function ContainerAug4CodiaStudio2() {
           style={{ zIndex: 0 }}
         />
 
-        <div className="relative z-10 flex flex-col w-full pb-[clamp(16px,11.9vw,60px)]">
+        <div className="relative z-10 flex flex-col w-full pb-24">
 
           {/* ── User Profile Card ── */}
           <motion.div
@@ -251,58 +252,7 @@ export default function ContainerAug4CodiaStudio2() {
         </div>
 
         {/* ── Bottom Navigation Bar ── */}
-        <div className="sticky bottom-0 w-full z-50">
-          <div className="relative w-full">
-            <img
-              src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/8bab0a36e_a5034cf96_55fc88def5457494b4c782158865107e667fe1e6.png"
-              alt="nav bar bg"
-              className="w-full h-[60px] object-cover object-center"
-            />
-            <div className="absolute inset-0 flex flex-row items-start justify-around px-2 pt-[6px]">
-              {/* Trang chủ */}
-              <div className="flex flex-col items-center gap-[2px]">
-                <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/92cb83f13_f5d1a84c5_662584c83fcdcafcb3fb4e6476523e7ee7e346fa.png" alt="home" className="w-7 h-7 object-cover" />
-                <span
-                  className="text-[14px] leading-5"
-                  style={{ fontFamily: "Roboto, sans-serif", color: "#c8d8e8" }}
-                >
-                  Trang chủ
-                </span>
-              </div>
-              {/* Giải Thưởng */}
-              <div className="flex flex-col items-center gap-[2px]">
-                <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/60999e63e_1a1d461d3_08a7a34ab0fb8f2ea39a0079ef12bae6cdb26081.png" alt="prizes" className="w-7 h-7 object-cover" />
-                <span
-                  className="text-[14px] leading-5"
-                  style={{ fontFamily: "Roboto, sans-serif", color: "#254153" }}
-                >
-                  Giải Thưởng
-                </span>
-              </div>
-              {/* Sảnh Chơi */}
-              <div className="flex flex-col items-center gap-[2px]">
-                <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/c0992646d_362a137af_e66ddabe4494f5bdf2af2b928985eea17a1bc4e7.png" alt="lobby" className="w-[34px] h-[34px] object-cover" />
-                <span
-                  className="text-[14px] leading-4"
-                  style={{ fontFamily: "Roboto, sans-serif", color: "#c8d8e8" }}
-                >
-                  Sảnh Chơi
-                </span>
-              </div>
-              {/* Của Tôi */}
-              <div className="flex flex-col items-center gap-[2px]">
-                <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/2e6e1528f_2f06e385e_9b600cf62521bab6b88b518a8c1fd409a38e36c2.png" alt="profile" className="w-7 h-7 object-cover" />
-                <span
-                  className="text-[14px]"
-                  style={{ fontFamily: "Roboto, sans-serif", color: "#9d5061", lineHeight: "17px" }}
-                >
-                  Của Tôi
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <BottomNav />
       </div>
     </main>
   );

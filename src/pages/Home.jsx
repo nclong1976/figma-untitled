@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import BottomNav from "@/components/BottomNav";
 
 export default function MarinaBaySandsApp() {
   return (
@@ -15,7 +16,7 @@ export default function MarinaBaySandsApp() {
       </div>
 
       {/* Content Flow */}
-      <div className="relative z-10 flex flex-col flex-1 pb-[clamp(16px,9.7vw,50px)]">
+      <div className="relative z-10 flex flex-col flex-1 pb-24">
         {/* Header */}
         <header className="relative w-full min-h-[37px] flex flex-col items-center justify-center shrink-0">
           <img
@@ -175,28 +176,7 @@ export default function MarinaBaySandsApp() {
       </button>
 
       {/* Bottom Navigation */}
-      <nav className="absolute bottom-0 left-0 w-full min-h-[50px] z-50">
-        <div className="absolute top-[-15px] left-0 w-full h-4 bg-accent z-0" /> {/* Accent line above nav */}
-        <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/98f5d6cba_8d6379b95_14d14d5794fe6f90218db68fc7112d8e087eb2e1.png" alt="Nav Background" className="absolute inset-0 w-full h-full object-cover z-0" />
-        <div className="relative z-10 w-full h-full grid grid-cols-4 items-center">
-          <button className="flex flex-col items-center justify-center gap-1 hover:opacity-80 transition-opacity">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/8390c83a6_5af996216_217ac042c74810ab527d374523849755bf470f61.png" alt="Trang chủ" className="w-[19px] h-[19px] object-cover" />
-            <span className="text-figma-10 font-normal font-paragraph leading-figma-12 text-figma-text-3">Trang chủ</span>
-          </button>
-          <button className="flex flex-col items-center justify-center gap-1 hover:opacity-80 transition-opacity">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/5f6b77fef_235fe25c7_26cd816d2c3af9bd3dd1eb034cc9b5a5eb4fcf78.png" alt="Giải Thưởng" className="w-[18px] h-[19px] object-cover" />
-            <span className="text-figma-10 font-normal font-paragraph leading-figma-13 text-figma-text-1">Giải Thưởng</span>
-          </button>
-          <button className="flex flex-col items-center justify-center gap-1 hover:opacity-80 transition-opacity">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/a06965d60_4a773a828_d440d5c368de5635492e30921cb8fa4b7c1e0271.png" alt="Sảnh Chơi" className="w-6 h-[22px] object-cover" />
-            <span className="text-figma-10 font-normal font-paragraph leading-figma-11 text-figma-text-1">Sanh Choi</span>
-          </button>
-          <button className="flex flex-col items-center justify-center gap-1 hover:opacity-80 transition-opacity">
-            <img src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/117ce1079_da10fd381_67d7d4616cdd5693b561bbc12eefabc1755a1866.png" alt="Của Tôi" className="w-[17px] h-[18px] object-cover" />
-            <span className="text-figma-10 font-normal font-paragraph leading-figma-11 text-figma-text-4">Của Tôi</span>
-          </button>
-        </div>
-      </nav>
+      <BottomNav />
     </main>
   );
 }

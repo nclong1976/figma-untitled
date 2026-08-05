@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
+import BottomNav from "@/components/BottomNav";
 
 const GameCard = ({ title, titleClass, bgImg, personImg, delay = 0 }) => {
   return (
@@ -33,76 +34,6 @@ const GameCard = ({ title, titleClass, bgImg, personImg, delay = 0 }) => {
   );
 };
 
-const BottomNav = () => {
-  const [activeTab, setActiveTab] = useState(2);
-
-  const navItems = [
-    {
-      icon: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/06ad1556b_4d9270ecb_f948ee85b8055dbfa49c76f17299af23a7a7418e.png",
-      text: "Hong chu",
-      baseClass: "text-figma-16 font-normal font-figma-roboto leading-figma-20",
-      defaultColor: "text-[#696a7a]",
-    },
-    {
-      icon: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/dab135051_e66e4472a_0871272d9d8063c7f9fb8893517edc0a62ca43fc.png",
-      text: "Giải Thờng",
-      baseClass: "text-figma-18 font-normal font-figma-roboto leading-figma-21",
-      defaultColor: "text-figma-text-1-4",
-    },
-    {
-      icon: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/9c29eabb2_818c46bfd_3baec26f256d272b246d4e07ab2afb6c2e2db0ec.png",
-      text: "Sảnh Chơi",
-      baseClass: "text-figma-16 font-normal font-figma-roboto leading-figma-18",
-      defaultColor: "text-figma-text-1-4",
-      activeColor: "text-figma-text-2-4",
-    },
-    {
-      icon: "https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/26848202e_7d3f456d6_014822637413934236d82debb601cd13e85f31af.png",
-      text: "Của Tôi",
-      baseClass: "text-figma-16 font-normal font-figma-roboto leading-figma-17",
-      defaultColor: "text-figma-text-1-4",
-    },
-  ];
-
-  return (
-    <div className="absolute bottom-0 left-0 w-full min-h-[61px] z-20">
-      <img
-        src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/e8b646eab_865386036_9e69a63bb54adfb548d506a4804af66d483b1361.png"
-        alt="Nav Background"
-        className="absolute inset-0 w-full h-full object-cover object-center"
-      />
-      <div className="absolute inset-0 grid grid-cols-4 h-full">
-        {navItems.map((item, idx) => {
-          const isActive = activeTab === idx;
-          const colorClass = isActive && item.activeColor ? item.activeColor : item.defaultColor;
-
-          return (
-            <button
-              key={idx}
-              onClick={() => setActiveTab(idx)}
-              className="flex flex-col items-center justify-center h-full w-full relative z-10 group"
-            >
-              <motion.div
-                whileTap={{ scale: 0.85 }}
-                className="flex flex-col items-center gap-[2px]"
-              >
-                <img
-                  src={item.icon}
-                  alt={item.text}
-                  className="w-7 h-7 object-contain transition-transform group-hover:-translate-y-0.5"
-                />
-                <span className={`${item.baseClass} ${colorClass} transition-colors`}>
-                  {item.text}
-                </span>
-              </motion.div>
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
 export default function ContainerAug4CodiaStudio3() {
   return (
     <main className="w-full max-w-[508px] mx-auto h-[100dvh] relative overflow-clip bg-figma-primary">
@@ -116,7 +47,7 @@ export default function ContainerAug4CodiaStudio3() {
       </div>
 
       {/* Scrollable Content Area */}
-      <div className="relative z-10 h-full overflow-y-auto pb-[clamp(20px,15.7vw,80px)] px-[15px] pt-[clamp(16px,9.3vw,47px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="relative z-10 h-full overflow-y-auto pb-28 px-[15px] pt-[clamp(16px,9.3vw,47px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
         {/* Section 1: May mắn 28 */}
         <motion.div

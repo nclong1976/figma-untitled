@@ -34,9 +34,9 @@ const AuthenticatedApp = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/ContainerAug4CodiaStudio" element={<ContainerAug4CodiaStudio />} />
-      <Route path="/ContainerAug4CodiaStudio2" element={<ContainerAug4CodiaStudio2 />} />
-      <Route path="/ContainerAug4CodiaStudio3" element={<ContainerAug4CodiaStudio3 />} />
+      <Route path="/giai-thuong" element={<ContainerAug4CodiaStudio />} />
+      <Route path="/cua-toi" element={<ContainerAug4CodiaStudio2 />} />
+      <Route path="/sanh-choi" element={<ContainerAug4CodiaStudio3 />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
