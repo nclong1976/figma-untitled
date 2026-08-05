@@ -8,7 +8,7 @@ export default function PreviousDrawBar({ period, balance, drawn, threshold }) {
     <section className="relative z-10 w-full px-[7px] pt-[15px] pb-[10px] flex flex-col gap-3">
       <div className="flex justify-between items-start">
         <p className="text-figma-22 font-normal font-figma-inter leading-figma-27 text-[#b45258]">
-          {period}Giai đoạn
+          {period} Giai đoạn
         </p>
         <div className="flex flex-col items-end pr-2">
           <img

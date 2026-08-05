@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { getGameConfig, CHIPS, computeDrawLabels } from "./gameConfig";
 import { getTier } from "@/components/lobby/lobbyData";
+import GameHeader from "./GameHeader";
+import PreviousDrawBar from "./PreviousDrawBar";
+import CountdownBar from "./CountdownBar";
 import Ball from "./Ball";
-import { ChevronLeft, Lock } from "lucide-react";
+import { Lock, ChevronDown } from "lucide-react";
 
 const randomDraw = (count) => Array.from({ length: count }, () => Math.floor(Math.random() * 10));
 
 export default function GamePlayScreen({ gameId, tier }) {
   const config = useMemo(() => getGameConfig(gameId), [gameId]);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const [activeTabId, setActiveTabId] = useState(config.tabs[0].id);
   const activeTab = config.tabs.find((t) => t.id === activeTabId) || config.tabs[0];
@@ -31,7 +32,6 @@ export default function GamePlayScreen({ gameId, tier }) {
 
   const bettingClosed = countdown <= 0;
 
-  // Low-latency countdown: count to 0 (draw + overlay), then reset next tick
   useEffect(() => {
     const t = setInterval(() => {
       setCountdown((c) => {
@@ -47,10 +47,6 @@ export default function GamePlayScreen({ gameId, tier }) {
     }, 1000);
     return () => clearInterval(t);
   }, [period, drawn, config]);
-
-  const labels = computeDrawLabels(drawn, config.bigThreshold);
-  const mm = String(Math.floor(countdown / 60)).padStart(1, "0");
-  const ss = String(countdown % 60).padStart(2, "0");
 
   const toggleCell = useCallback((tabId, tabLabel, item) => {
     setSelectedCells((prev) => {
@@ -89,117 +85,115 @@ export default function GamePlayScreen({ gameId, tier }) {
     toast({ title: "Đã gửi đơn đặt hàng", description: `${toSubmit.length} vé · ${total} coin · kỳ ${period}` });
   };
 
+  const mm = String(Math.floor(countdown / 60)).padStart(1, "0");
+  const ss = String(countdown % 60).padStart(2, "0");
+
   return (
-    <main className="w-full max-w-[616px] mx-auto h-[100dvh] relative overflow-hidden bg-[#0A0E1A] flex flex-col font-sans">
-      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_15%_10%,rgba(124,199,255,0.10),transparent_40%),radial-gradient(circle_at_85%_18%,rgba(255,215,0,0.06),transparent_42%)]" />
+    <main className="max-w-[619px] w-full mx-auto h-[100dvh] relative flex flex-col overflow-hidden bg-[#1a1a1a]">
+      {/* Top header */}
+      <GameHeader gameName={config.name} />
 
-      {/* Compact header — title, balance, last draw, dynamic labels, countdown */}
-      <header className="relative z-20 shrink-0 px-3 pt-2 pb-2 border-b border-white/10 bg-white/5 backdrop-blur-sm">
-        <div className="flex items-center gap-2">
-          <button onClick={() => navigate(-1)} className="shrink-0"><ChevronLeft className="w-6 h-6 text-white/80" /></button>
-          <h1 className="text-white font-bold text-sm flex-1 truncate">{config.name}</h1>
-          <div className="text-right shrink-0">
-            <p className="text-[#FFD700] text-[10px] leading-none">Số dư</p>
-            <p className="text-white font-bold text-xs tabular-nums">{balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+      {/* Live status bar */}
+      <PreviousDrawBar period={period} balance={balance} drawn={drawn} threshold={config.bigThreshold} />
+
+      {/* Active draw bar */}
+      <CountdownBar currentPeriod={period} countdown={countdown} history={history} threshold={config.bigThreshold} />
+
+      {/* Betting matrix: sidebar + white grid */}
+      <section className="relative z-10 flex-1 min-h-0 flex bg-[#f4f4f4]">
+        <aside className="w-[96px] shrink-0 flex flex-col bg-[#f0f0f0] border-r border-[#e0e0e0]">
+          {config.tabs.map((t) => {
+            const active = t.id === activeTabId;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setActiveTabId(t.id)}
+                className={`flex-1 min-h-[64px] flex items-center justify-center transition-colors ${active ? "bg-[#ff6600]" : "hover:bg-[#e8e8e8]"}`}
+              >
+                <p className={`text-[15px] font-semibold leading-tight text-center ${active ? "text-white" : "text-[#8c8c8c]"}`}>{t.label}</p>
+              </button>
+            );
+          })}
+        </aside>
+
+        <div className="flex-1 min-h-0 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+          <div className="h-10 flex items-center justify-center bg-[#e8e8e8] border-b border-[#dcdcdc] sticky top-0 z-10">
+            <p className="text-[16px] font-bold text-[#b62d34]">{activeTab.label}</p>
           </div>
-          <div className="shrink-0 ml-1 px-2 py-1 rounded-md bg-[#ca0a1b] text-white font-bold text-xs tabular-nums">{mm}:{ss}</div>
+          {activeTab.sections.map((sec, si) => (
+            <div key={si} className="grid gap-[1px] bg-[#ececec]" style={{ gridTemplateColumns: `repeat(${Math.min(sec.columns, 5)},minmax(0,1fr))` }}>
+              {sec.items.map((item, i) => {
+                const sel = selectedCells.some((s) => s.tabId === activeTab.id && s.label === item.label);
+                return (
+                  <button
+                    key={i}
+                    onClick={() => !bettingClosed && toggleCell(activeTab.id, activeTab.label, item)}
+                    className={`flex flex-col items-center justify-center h-[78px] bg-white transition-colors ${sel ? "bg-[#ffe9d6] ring-2 ring-[#ff6600] inset-shadow" : "hover:bg-[#fafafa]"}`}
+                  >
+                    <p className={`text-[15px] font-semibold leading-tight ${sel ? "text-[#ff6600]" : "text-[#333]"}`}>{item.label}</p>
+                    <p className="text-[13px] text-[#999] mt-1">{item.odds}</p>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
-        <div className="flex items-center gap-1.5 mt-1.5">
-          <span className="text-white/50 text-[10px] mr-1 shrink-0">Kỳ {period}</span>
-          {drawn.map((n, i) => <Ball key={i} number={n} size={20} />)}
-          <span className="ml-auto flex items-center gap-1.5 text-[10px] shrink-0">
-            <span className="text-white/50">Tổng</span>
-            <span className="bg-[#e4b060] text-[#7a3a1a] font-bold px-1.5 py-0.5 rounded">{labels.sum}</span>
-            <span className="text-[#FFD700] font-semibold">{labels.big}</span>
-            <span className="text-white/70">{labels.parity}</span>
-          </span>
-        </div>
-      </header>
+      </section>
 
-      {/* Tab selector */}
-      <div className="relative z-10 shrink-0 flex gap-1 px-2 py-2 overflow-x-auto bg-[#0f1326] [&::-webkit-scrollbar]:hidden">
-        {config.tabs.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setActiveTabId(t.id)}
-            className={`shrink-0 px-3 py-1.5 rounded-md text-xs whitespace-nowrap transition-colors ${activeTabId === t.id ? "bg-[#fe6400] text-white font-semibold" : "bg-white/5 text-white/60"}`}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Betting matrix — tight grid, label over odds */}
-      <div className="relative z-10 flex-1 min-h-0 overflow-y-auto px-2 pb-2 [&::-webkit-scrollbar]:hidden">
-        {activeTab.sections.map((sec, si) => (
-          <div key={si} className="grid gap-1.5 mb-2" style={{ gridTemplateColumns: `repeat(${Math.min(sec.columns, 5)},minmax(0,1fr))` }}>
-            {sec.items.map((item, i) => {
-              const sel = selectedCells.some((s) => s.tabId === activeTab.id && s.label === item.label);
-              return (
-                <button
-                  key={i}
-                  onClick={() => !bettingClosed && toggleCell(activeTab.id, activeTab.label, item)}
-                  className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-md text-center transition-all ${sel ? "bg-[#FFD700]/15 border border-[#FFD700] shadow-[inset_0_0_6px_rgba(255,215,0,0.4)]" : "bg-white/5 border border-white/10 hover:border-white/20"}`}
-                >
-                  <p className={`text-white text-xs font-semibold leading-tight ${sel ? "text-[#FFD700]" : ""}`}>{item.label}</p>
-                  <p className="text-[#999] text-[10px] leading-tight mt-0.5">{item.odds}</p>
-                </button>
-              );
-            })}
+      {/* Betting control bar (orange) */}
+      <footer className="relative z-20 shrink-0 bg-[#ff6600] px-2.5 pt-2 pb-2">
+        <div className="flex items-center justify-between">
+          <p className="text-white text-[13px] font-medium truncate">{statusText}</p>
+          <div className="flex items-center gap-1">
+            <p className="text-white text-[13px] font-semibold">Đặt cược nhanh</p>
+            <ChevronDown className="w-4 h-4 text-white" />
           </div>
-        ))}
-      </div>
+        </div>
+
+        <div className="flex justify-between px-1 mt-2">
+          {tierChips.map((c) => (
+            <button
+              key={c}
+              onClick={() => { setSelectedChip(c); setBetAmount(c); }}
+              className={`relative w-[52px] h-[52px] flex items-center justify-center transition-transform active:scale-95`}
+            >
+              <span className={`absolute inset-0 rounded-full ${selectedChip === c ? "bg-[#FFD700] ring-2 ring-white" : "bg-[#7a3d00] ring-1 ring-[#a85a00]"}`} />
+              <span className={`relative z-10 text-[14px] font-bold ${selectedChip === c ? "text-[#5a2d00]" : "text-[#ffd9a0]"}`}>{c}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2 mt-2">
+          <p className="text-white text-[14px] shrink-0">Số tiền cược:</p>
+          <input
+            type="number"
+            min="0"
+            value={betAmount}
+            onChange={(e) => setBetAmount(Math.max(0, Number(e.target.value)))}
+            className="flex-1 h-11 rounded-lg bg-white px-3 text-center text-[#333] text-[15px] font-semibold outline-none"
+          />
+          <button onClick={handleAdd} className="h-11 px-3 rounded-lg bg-[#4a097f] text-white text-[14px] font-semibold">Mua hàng</button>
+          <button onClick={handleReset} className="h-11 px-3 rounded-lg bg-[#cc0000] text-white text-[14px] font-semibold">Đặt lại</button>
+        </div>
+
+        <button
+          onClick={handlePlace}
+          disabled={bettingClosed}
+          className="mt-2 w-full h-12 rounded-xl bg-[#ff6600] border border-[#ff8c33] text-white font-bold text-[16px] shadow-lg active:scale-[0.98] transition-transform disabled:opacity-50"
+        >
+          Đặt cược
+        </button>
+      </footer>
 
       {/* Betting-closed overlay */}
       {bettingClosed && (
-        <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/55 backdrop-blur-sm">
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-black/55 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-2 text-white">
             <Lock className="w-8 h-8 text-[#FFD700]" />
             <p className="font-bold text-sm">Đang chờ kỳ tiếp theo</p>
           </div>
         </div>
       )}
-
-      {/* Compact bet control bar */}
-      <footer className="relative z-20 shrink-0 bg-[#0f1326] border-t border-white/10 px-2 pt-2 pb-2">
-        <p className="text-center text-[11px] text-[#f1c195] mb-1.5 truncate">{statusText}</p>
-
-        {/* Horizontal quick-chip scroll */}
-        <div className="flex gap-2 overflow-x-auto pb-1.5 [&::-webkit-scrollbar]:hidden snap-x snap-mandatory">
-          {tierChips.map((c) => (
-            <button
-              key={c}
-              onClick={() => { setSelectedChip(c); setBetAmount(c); }}
-              className={`snap-start shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-xs font-bold transition-all ${selectedChip === c ? "bg-[#FFD700] text-[#0A0E1A] ring-2 ring-white" : "bg-[#4a3500] text-[#FFD700]/80"}`}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-
-        {/* Action ribbon */}
-        <div className="flex items-center gap-1.5 h-11">
-          <input
-            type="number"
-            min="0"
-            value={betAmount}
-            onChange={(e) => setBetAmount(Math.max(0, Number(e.target.value)))}
-            className="flex-1 h-11 bg-white/10 border border-white/15 rounded-lg px-2 text-center text-white text-sm outline-none focus:border-[#FFD700]"
-            placeholder="Số tiền"
-          />
-          <button onClick={handleAdd} className="h-11 px-3 rounded-lg bg-[#4a097f] text-[#ddcee4] text-xs font-semibold">Mua hàng</button>
-          <button onClick={handleReset} className="h-11 px-3 rounded-lg bg-[#c9101b] text-[#e7bbbc] text-xs font-semibold">Đặt lại</button>
-        </div>
-
-        {/* Primary CTA */}
-        <button
-          onClick={handlePlace}
-          disabled={bettingClosed}
-          className="mt-1.5 w-full h-12 rounded-xl bg-[#FFD700] text-[#0A0E1A] font-bold text-sm active:scale-[0.98] transition-transform disabled:opacity-40"
-        >
-          Đặt cược
-        </button>
-      </footer>
     </main>
   );
 }
