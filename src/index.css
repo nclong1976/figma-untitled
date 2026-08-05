@@ -41,6 +41,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Pontano+Sans:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Tauri:wght@400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -200,6 +201,21 @@
     --figma-text-8-5: 60 1% 68%;
     --figma-text-9-5: 0 0% 34%;
     --figma-text-10-5: 30 1% 68%;
+    /* figma:untitled (cZCvPbAn) — end */
+    /* figma:untitled (cZCvPbAn) — start */
+    --figma-secondary-3: 240 4% 16%;
+    --figma-accent-3: 345 88% 10%;
+    --figma-muted-2: 1 98% 62%;
+    --figma-text-1-6: 252 4% 45%;
+    --figma-text-2-6: 357 49% 47%;
+    --figma-text-3-6: 2 65% 89%;
+    --figma-text-4-6: 16 15% 66%;
+    --figma-text-5-6: 248 3% 45%;
+    --figma-text-6-6: 14 16% 67%;
+    --figma-text-7-6: 15 17% 67%;
+    --figma-text-8-6: 17 18% 65%;
+    --figma-text-9-6: 18 18% 68%;
+    --figma-text-10-6: 232 10% 84%;
     /* figma:untitled (cZCvPbAn) — end */
   }
 

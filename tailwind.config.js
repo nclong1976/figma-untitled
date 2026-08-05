@@ -11,6 +11,22 @@ module.exports = {
   		},
   		colors: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-secondary-3": "hsl(var(--figma-secondary-3))",
+        "figma-accent-3": "hsl(var(--figma-accent-3))",
+        "figma-muted-2": "hsl(var(--figma-muted-2))",
+        "figma-text-1-6": "hsl(var(--figma-text-1-6))",
+        "figma-text-2-6": "hsl(var(--figma-text-2-6))",
+        "figma-text-3-6": "hsl(var(--figma-text-3-6))",
+        "figma-text-4-6": "hsl(var(--figma-text-4-6))",
+        "figma-text-5-6": "hsl(var(--figma-text-5-6))",
+        "figma-text-6-6": "hsl(var(--figma-text-6-6))",
+        "figma-text-7-6": "hsl(var(--figma-text-7-6))",
+        "figma-text-8-6": "hsl(var(--figma-text-8-6))",
+        "figma-text-9-6": "hsl(var(--figma-text-9-6))",
+        "figma-text-10-6": "hsl(var(--figma-text-10-6))",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-primary-3": "hsl(var(--figma-primary-3))",
         "figma-secondary-2": "hsl(var(--figma-secondary-2))",
         "figma-accent-2": "hsl(var(--figma-accent-2))",
@@ -179,6 +195,15 @@ module.exports = {
   		
   		fontSize: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-13": "13px",
+        "figma-15": "15px",
+        "figma-17": "17px",
+        "figma-18": "18px",
+        "figma-20": "20px",
+        "figma-21": "21px",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-19": "19px",
         "figma-20": "20px",
         "figma-21": "21px",
@@ -243,6 +268,10 @@ module.exports = {
   		fontWeight: {
         // figma:untitled (cZCvPbAn) — start
         "figma-normal": "400",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
         "figma-semibold": "600",
         "figma-bold": "700",
         // figma:untitled (cZCvPbAn) — end
@@ -274,6 +303,15 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-22": "22px",
+        "figma-23": "23px",
+        "figma-24": "24px",
+        "figma-26": "26px",
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-20": "20px",
         "figma-22": "22px",
@@ -356,6 +394,10 @@ module.exports = {
   		
   		
   		fontFamily: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-hanken-grotesk": ['"Hanken Grotesk"', 'sans-serif'],
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-gabarito": ['"Gabarito"', 'sans-serif'],
         "figma-roboto-flex": ['"Roboto Flex"', 'sans-serif'],

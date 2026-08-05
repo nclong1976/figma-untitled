@@ -16,6 +16,7 @@ import DrawDetailsPage from './pages/DrawDetailsPage';
 import AdminRoute from '@/components/admin/AdminRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUserDetail from './pages/admin/AdminUserDetail';
+import ContainerAug5CodiaStudio from './pages/ContainerAug5CodiaStudio';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -51,6 +52,7 @@ const AuthenticatedApp = () => {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/users/:id" element={<AdminUserDetail />} />
       </Route>
+      <Route path="/ContainerAug5CodiaStudio" element={<ContainerAug5CodiaStudio />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
