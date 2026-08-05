@@ -59,13 +59,30 @@ module.exports = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
-  		},
-  		fontFamily: {
-  			heading: ['var(--font-heading)'],
-  			body: ['var(--font-body)'],
-  			display: ['var(--font-display)'],
-  			mono: ['var(--font-mono)']
+  			},
+  		
+  		
+  		'figma-text-2': 'hsl(var(--figma-text-2))',
+  		
+  		'figma-text-3': 'hsl(var(--figma-text-3))',
+  		
+  		'figma-text-6': 'hsl(var(--figma-text-6))',
+  		
+  		'figma-text-10': 'hsl(var(--figma-text-10))',
+  		
+  		'figma-text-1': 'hsl(var(--figma-text-1))',
+  		
+  		'figma-text-7': 'hsl(var(--figma-text-7))',
+  		
+  		'figma-text-4': 'hsl(var(--figma-text-4))',
+  		
+  		'figma-text-9': 'hsl(var(--figma-text-9))',
+  		
+  		'figma-text-5': 'hsl(var(--figma-text-5))',
+  		
+  		'figma-text-8': 'hsl(var(--figma-text-8))',
+  		
+  		
   		},
   		keyframes: {
   			'accordion-down': {
@@ -88,8 +105,80 @@ module.exports = {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  		},
+  		
+  		
+  		fontSize: {
+  			
+  			'figma-10': '10px',
+  			
+  			'figma-11': '11px',
+  			
+  			'figma-12': '12px',
+  			
+  			'figma-13': '13px',
+  			
+  			'figma-14': '14px',
+  			
+  			'figma-17': '17px',
+  			
+  		},
+  		
+  		
+  		fontWeight: {
+  			
+  			'figma-light': '300',
+  			
+  			'figma-normal': '400',
+  			
+  			'figma-bold': '700',
+  			
+  		},
+  		
+  		
+  		lineHeight: {
+  			
+  			'figma-11': '11px',
+  			
+  			'figma-12': '12px',
+  			
+  			'figma-13': '13px',
+  			
+  			'figma-14': '14px',
+  			
+  			'figma-15': '15px',
+  			
+  			'figma-16': '16px',
+  			
+  			'figma-17': '17px',
+  			
+  			'figma-22': '22px',
+  			
+  			'figma-31': '31px',
+  			
+  		},
+  		
+  		
+  		fontFamily: {
+  			
+  			'heading': ['"Sofadi One"', 'sans-serif'],
+  			
+  			'paragraph': ['"Arial"', 'sans-serif'],
+  			
+  			'figma-inter': ['"Inter"', 'sans-serif'],
+  			
+  			'figma-noto-sans-sc': ['"Noto Sans SC"', 'sans-serif'],
+  			
+  			'figma-arimo': ['"Arimo"', 'sans-serif'],
+  			
+  			'figma-manrope': ['"Manrope"', 'sans-serif'],
+  			
+  			'figma-news-cycle': ['"News Cycle"', 'sans-serif'],
+  			
+  		},
+  		
+  		
   	}
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
