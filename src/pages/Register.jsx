@@ -69,7 +69,7 @@ export default function Register() {
       let role = "user";
       try { const me = await base44.auth.me(); role = me?.role || "user"; } catch { /* ignore */ }
       toast({ title: "Đăng ký thành công", description: "Tài khoản đã được tạo" });
-      window.location.href = role === "admin" ? "/admin" : returnTo;
+      window.location.href = role === "admin" ? "/admin" : "/";
     } catch (err) {
       toast({ title: "Đăng ký thất bại", description: err.message || "Không thể tạo tài khoản", variant: "destructive" });
     } finally {
