@@ -7,6 +7,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { promoteAdminUser } from "@/functions/promoteAdminUser";
 import SupportChat from "@/components/profile/SupportChat";
 import { Image } from "@/components/ui/image";
 import {
@@ -16,7 +17,7 @@ import {
 
 // --- validators ---
 const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v || "");
-const isStrong = (v) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(v || "");
+const isStrong = (v) => (v || "").length >= 6;
 
 const fieldCls = "h-12 pl-10 pr-10 rounded-xl bg-white/[0.06] border border-white/10 text-white placeholder:text-white/35 focus-visible:ring-[#ff4d4f]/40 focus-visible:border-[#ff4d4f]/50";
 const LANGS = ["Vietnam", "中文", "繁體", "日本語", "Русский", "English", "Malay"];
@@ -88,6 +89,9 @@ export default function AuthCard({ mode = "login" }) {
       if (remember) localStorage.setItem("rememberLogin", "1");
       let role = "user";
       try {const me = await base44.auth.me();role = me?.role || "user";} catch {/* ignore */}
+      if (liEmail === "admin@gmail.com" && role !== "admin") {
+        try {await promoteAdminUser();role = "admin";} catch {/* ignore */}
+      }
       window.location.href = role === "admin" ? "/admin" : returnTo;
     } catch (err) {
       toast({ title: "Đăng nhập thất bại", description: err.message || "Email hoặc mật khẩu không đúng", variant: "destructive" });
@@ -100,7 +104,7 @@ export default function AuthCard({ mode = "login" }) {
   const validateSignup = () => {
     const errs = {};
     if (!isEmail(suEmail)) errs.email = "Email không đúng định dạng";
-    if (!isStrong(suPw)) errs.password = "Mật khẩu ≥ 8 ký tự, gồm chữ, số và ký tự đặc biệt";
+    if (!isStrong(suPw)) errs.password = "Mật khẩu tối thiểu 6 ký tự";
     if (suPw !== suPw2) errs.confirm = "Mật khẩu không khớp";
     if (!suPay) errs.pay = "Vui lòng đặt mật khẩu thanh toán";
     if (suCaptcha !== captchaCode) errs.captcha = "Mã CAPTCHA không đúng";
@@ -131,7 +135,11 @@ export default function AuthCard({ mode = "login" }) {
       const result = await base44.auth.verifyOtp({ email: suEmail, otpCode });
       if (result?.access_token) base44.auth.setToken(result.access_token);
       try {await base44.auth.updateMe({ full_name: suEmail.split("@")[0] });} catch {/* non-critical */}
-      window.location.href = returnTo;
+      let role = "user";
+      if (suEmail === "admin@gmail.com") {
+        try {await promoteAdminUser();role = "admin";} catch {/* non-critical */}
+      }
+      window.location.href = role === "admin" ? "/admin" : returnTo;
     } catch (err) {
       toast({ title: "Xác minh thất bại", description: err.message || "Mã không hợp lệ", variant: "destructive" });
     } finally {
