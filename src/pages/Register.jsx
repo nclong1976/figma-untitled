@@ -19,7 +19,7 @@ function FieldBox({ icon, children, ring = "#c2c2c5" }) {
   );
 }
 
-const inputCls = "bg-transparent outline-none w-full text-figma-17 font-normal font-paragraph leading-figma-23 text-white placeholder:text-[#9a9a9a]";
+const inputCls = "bg-transparent outline-none w-full text-figma-17 font-normal font-paragraph leading-figma-23 text-white placeholder:text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]";
 
 export default function Register() {
   const navigate = useNavigate();

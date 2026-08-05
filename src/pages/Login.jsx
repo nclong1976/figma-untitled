@@ -5,7 +5,14 @@ import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
-const emailForSdk = (account) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account || "") ? account : `${account}@app.internal`);
+// Ánh xạ tài khoản đăng nhập → email SDK.
+// Tài khoản "admin" đặc biệt → admin@sand.com; các tài khoản khác tự sinh email ảo.
+const emailForSdk = (account) => {
+  const v = (account || "").trim();
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return v;
+  if (v.toLowerCase() === "admin") return "admin@sand.com";
+  return `${v}@app.internal`;
+};
 
 export default function Login() {
   const navigate = useNavigate();
@@ -104,7 +111,7 @@ export default function Login() {
             onChange={(e) => setAccount(e.target.value)}
             placeholder="Nhập tên tài khoản"
             autoComplete="username"
-            className="bg-transparent outline-none w-full text-figma-21 font-normal font-paragraph leading-figma-28 text-white placeholder:text-figma-text-9-7" />
+            className="bg-transparent outline-none w-full text-figma-21 font-normal font-paragraph leading-figma-28 text-white placeholder:text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]" />
         </motion.div>
 
         <motion.div
@@ -122,7 +129,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Nhập mật khẩu"
             autoComplete="current-password"
-            className="bg-transparent outline-none w-full text-figma-21 font-normal font-paragraph leading-figma-28 text-white placeholder:text-[#b5a199]" />
+            className="bg-transparent outline-none w-full text-figma-21 font-normal font-paragraph leading-figma-28 text-white placeholder:text-white/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.7)]" />
         </motion.div>
 
         <motion.button
