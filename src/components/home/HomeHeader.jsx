@@ -19,9 +19,9 @@ export default function HomeHeader({ onChat, onMenu, onRefresh }) {
         <button onClick={onChat} aria-label="Hỗ trợ" className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#7f7161] transition-colors">
           <Headphones className="w-4 h-4" />
         </button>
-        <button onClick={onMenu} aria-label="Menu" className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-[#7f7161] transition-colors hidden">
-          <MenuIcon className="w-4 h-4 hidden" />
-        </button>
+        
+
+        
       </div>
     </header>);
 
