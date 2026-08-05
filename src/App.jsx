@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import ContainerAug4CodiaStudio from './pages/ContainerAug4CodiaStudio';
 import ContainerAug4CodiaStudio2 from './pages/ContainerAug4CodiaStudio2';
 import ContainerAug4CodiaStudio3 from './pages/ContainerAug4CodiaStudio3';
+import ContainerAug4CodiaStudio4 from './pages/ContainerAug4CodiaStudio4';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -37,6 +38,7 @@ const AuthenticatedApp = () => {
       <Route path="/giai-thuong" element={<ContainerAug4CodiaStudio />} />
       <Route path="/cua-toi" element={<ContainerAug4CodiaStudio2 />} />
       <Route path="/sanh-choi" element={<ContainerAug4CodiaStudio3 />} />
+      <Route path="/ContainerAug4CodiaStudio4" element={<ContainerAug4CodiaStudio4 />} />
       {/* Add your page Route elements here */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

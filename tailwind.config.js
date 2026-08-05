@@ -11,6 +11,31 @@ module.exports = {
   		},
   		colors: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-primary-3": "hsl(var(--figma-primary-3))",
+        "figma-secondary-2": "hsl(var(--figma-secondary-2))",
+        "figma-accent-2": "hsl(var(--figma-accent-2))",
+        "figma-surface": "hsl(var(--figma-surface))",
+        "figma-border": "hsl(var(--figma-border))",
+        "figma-highlight": "hsl(var(--figma-highlight))",
+        "figma-subtle": "hsl(var(--figma-subtle))",
+        "figma-color-9": "hsl(var(--figma-color-9))",
+        "figma-color-11": "hsl(var(--figma-color-11))",
+        "figma-color-12": "hsl(var(--figma-color-12))",
+        "figma-color-13": "hsl(var(--figma-color-13))",
+        "figma-color-14": "hsl(var(--figma-color-14))",
+        "figma-text-1-5": "hsl(var(--figma-text-1-5))",
+        "figma-text-2-5": "hsl(var(--figma-text-2-5))",
+        "figma-text-3-5": "hsl(var(--figma-text-3-5))",
+        "figma-text-4-5": "hsl(var(--figma-text-4-5))",
+        "figma-text-5-5": "hsl(var(--figma-text-5-5))",
+        "figma-text-6-5": "hsl(var(--figma-text-6-5))",
+        "figma-text-7-5": "hsl(var(--figma-text-7-5))",
+        "figma-text-8-5": "hsl(var(--figma-text-8-5))",
+        "figma-text-9-5": "hsl(var(--figma-text-9-5))",
+        "figma-text-10-5": "hsl(var(--figma-text-10-5))",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-text-1-4": "hsl(var(--figma-text-1-4))",
         "figma-text-2-4": "hsl(var(--figma-text-2-4))",
         "figma-text-3-4": "hsl(var(--figma-text-3-4))",
@@ -154,6 +179,20 @@ module.exports = {
   		
   		fontSize: {
         // figma:untitled (cZCvPbAn) — start
+        "figma-19": "19px",
+        "figma-20": "20px",
+        "figma-21": "21px",
+        "figma-22": "22px",
+        "figma-23": "23px",
+        "figma-24": "24px",
+        "figma-25": "25px",
+        "figma-26": "26px",
+        "figma-27": "27px",
+        "figma-28": "28px",
+        "figma-32": "32px",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
         "figma-16": "16px",
         "figma-18": "18px",
         "figma-22": "22px",
@@ -204,6 +243,12 @@ module.exports = {
   		fontWeight: {
         // figma:untitled (cZCvPbAn) — start
         "figma-normal": "400",
+        "figma-semibold": "600",
+        "figma-bold": "700",
+        // figma:untitled (cZCvPbAn) — end
+      
+        // figma:untitled (cZCvPbAn) — start
+        "figma-normal": "400",
         "figma-bold": "700",
         // figma:untitled (cZCvPbAn) — end
       
@@ -229,6 +274,21 @@ module.exports = {
   		
   		
   		lineHeight: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-20": "20px",
+        "figma-22": "22px",
+        "figma-23": "23px",
+        "figma-24": "24px",
+        "figma-25": "25px",
+        "figma-26": "26px",
+        "figma-27": "27px",
+        "figma-28": "28px",
+        "figma-29": "29px",
+        "figma-30": "30px",
+        "figma-31": "31px",
+        "figma-36": "36px",
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-17": "17px",
         "figma-18": "18px",
@@ -296,6 +356,28 @@ module.exports = {
   		
   		
   		fontFamily: {
+        // figma:untitled (cZCvPbAn) — start
+        "figma-gabarito": ['"Gabarito"', 'sans-serif'],
+        "figma-roboto-flex": ['"Roboto Flex"', 'sans-serif'],
+        "figma-commissioner": ['"Commissioner"', 'sans-serif'],
+        "figma-open-sans": ['"Open Sans"', 'sans-serif'],
+        "figma-spline-sans": ['"Spline Sans"', 'sans-serif'],
+        "figma-schibsted-grotesk": ['"Schibsted Grotesk"', 'sans-serif'],
+        "figma-jaldi": ['"Jaldi"', 'sans-serif'],
+        "figma-mukta": ['"Mukta"', 'sans-serif'],
+        "figma-murecho": ['"Murecho"', 'sans-serif'],
+        "figma-archivo": ['"Archivo"', 'sans-serif'],
+        "figma-atkinson-hyperlegible": ['"Atkinson Hyperlegible"', 'sans-serif'],
+        "figma-ibm-plex-sans": ['"IBM Plex Sans"', 'sans-serif'],
+        "figma-instrument-sans": ['"Instrument Sans"', 'sans-serif'],
+        "figma-pt-sans": ['"PT Sans"', 'sans-serif'],
+        "figma-beiruti": ['"Beiruti"', 'sans-serif'],
+        "figma-istok-web": ['"Istok Web"', 'sans-serif'],
+        "figma-pontano-sans": ['"Pontano Sans"', 'sans-serif'],
+        "figma-tauri": ['"Tauri"', 'sans-serif'],
+        "figma-noto-sans": ['"Noto Sans"', 'sans-serif'],
+        // figma:untitled (cZCvPbAn) — end
+      
         // figma:untitled (cZCvPbAn) — start
         "figma-cabin": ['"Cabin"', 'sans-serif'],
         "figma-geist": ['"Geist"', 'sans-serif'],
