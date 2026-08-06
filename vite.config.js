@@ -15,5 +15,10 @@ export default defineConfig({
       visualEditAgent: true
     }),
     react(),
-  ]
+  ],
+  server: {
+    allowedHosts: [
+      'figma-untitled.onrender.com'
+    ]
+  }
 });
