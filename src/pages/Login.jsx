@@ -23,15 +23,29 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const user = localLogin({ account, password });
+      // Support both sync and async implementations of localLogin
+      const user = await Promise.resolve(localLogin({ account, password }));
+      if (!user) throw new Error("Đăng nhập thất bại (không có dữ liệu người dùng)");
+
+      // Ensure role is present (fall back to 'user')
+      const role = user.role || "user";
+
+      // Persist session in app context
       setSession(user);
+
       toast({ title: t("login_success"), variant: "success" });
-      // Role-Based Routing: admin → /admin, user → /dashboard.
-      // Ép path luôn là chuỗi hợp lệ để tránh lỗi 404 /[object%20Object].
-      const dest = user.role === "admin" ? "/admin" : typeof returnTo === "string" && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/dashboard";
+
+      // Role-Based Routing: admin → /admin, else returnTo (if safe) or /dashboard.
+      const dest = role === "admin"
+        ? "/admin"
+        : (typeof returnTo === "string" && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/dashboard");
+
+      // Debugging information to help diagnose redirect issues in browsers/devtools
+      try { console.debug("login: user", user, "dest", dest); } catch (e) { /* ignore */ }
+
       navigate(dest, { replace: true });
     } catch (err) {
-      const msg = err.message || "Tài khoản hoặc mật khẩu không đúng";
+      const msg = err?.message || "Tài khoản hoặc mật khẩu không đúng";
       setError(msg);
       toast({ title: "Đăng nhập thất bại", description: msg, variant: "destructive" });
     } finally {
@@ -101,7 +115,7 @@ export default function Login() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="bg-figma-primary-2 rounded-[27px] shadow-[inset_0_0_0_2px_#b8b4b9] w-full h-[61px] flex items-center px-[31px] gap-[20px] focus-within:shadow-[inset_0_0_0_2px_#b73e42] transition-shadow">
+          className="bg-figma-primary-2 rounded-[27px] shadow-[inset_0_0_0_2px_#b8b4b9] w-full h-[61px] flex items-center px-[31px] gap-[20px] focus-within:shadow-[inset_0_0_0_2px_#b73e42] transi[...]">
           <img
             src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/0275c983d_f1d7826e6_1289de38208ea60c36c32778edfbdb4094cfc6d9.png"
             className="w-[22px] h-[26px] object-cover shrink-0"
@@ -120,7 +134,7 @@ export default function Login() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="bg-figma-primary-2 rounded-[27px] shadow-[inset_0_0_0_1px_#bcb9be] w-full h-[61px] flex items-center px-[31px] gap-[20px] focus-within:shadow-[inset_0_0_0_2px_#b73e42] transition-shadow">
+          className="bg-figma-primary-2 rounded-[27px] shadow-[inset_0_0_0_1px_#bcb9be] w-full h-[61px] flex items-center px-[31px] gap-[20px] focus-within:shadow-[inset_0_0_0_2px_#b73e42] transi[...]">
           <img
             src="https://media.base44.com/images/public/6a729d033f9d0f63f381a6c6/f72ff3113_aba98cb86_11373047ec794e8892e07f1f381f23dba7139b01.png"
             className="w-[24px] h-[25px] object-cover shrink-0"
@@ -141,7 +155,7 @@ export default function Login() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="bg-[#fd4441] rounded-[4px_3px_0px_0px] shadow-[inset_0_0_0_1px_#cf7879] w-full h-[59px] flex items-center justify-center hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-70">
+          className="bg-[#fd4441] rounded-[4px_3px_0px_0px] shadow-[inset_0_0_0_1px_#cf7879] w-full h-[59px] flex items-center justify-center hover:brightness-110 active:scale-[0.98] transition-a[...]">
           <span className="text-[clamp(14px,4.6vw,24px)] font-bold font-paragraph leading-[1.25] text-figma-text-8-7">
             {loading ? t("processing") : t("login_btn")}
           </span>
@@ -167,12 +181,6 @@ export default function Login() {
 
 
 
-
-
-
-
-
-      
 
       {/* Bottom Image */}
       <motion.div
